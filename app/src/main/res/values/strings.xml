@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">eBenzinska</string>
+    <string name="title_activity_login">LoginActivity</string>
+    <string name="prompt_firstname">Ime</string>
+    <string name="prompt_lastname">Prezime</string>
+    <string name="prompt_email">E-mail</string>
+    <string name="prompt_password">Lozinka</string>
+    <string name="login_main">Prijava</string>
+    <string name="registration_main">Registracija</string>
+    <string name="email_missing">Unesite valjanu email adresu!</string>
+    <string name="password_missing">Unesite valjanu lozinku!</string>
+    <string name="action_sign_in">Prijavi se</string>
+    <string name="action_register">Registiraj se</string>
+    <string name="price">Cijena: </string>
+    <string name="addtocart">Dodaj </string>
+    <string name="cart_total">Ukupno :</string>
+    <string name="cart_placeorder">Potvrdi narudžbu</string>
+    <string name="title_activity_menu">MenuActivity</string>
+    <string name="tab_text_1">Gorivo</string>
+    <string name="tab_text_2">Hrana i piće</string>
+    <string name="tab_text_3">Usluge</string>
+    <string name="submit">Potvrdi</string>
+    <string name="fuelquantity">Količina goriva:</string>
+    <string name="fuelquantity2">Količina</string>
+    <string name="fuellitres">litara</string>
+    <string name="fuelmark">kn/l</string>
+    <string name="pricetag">kn</string>
+    <string name="cartproductname">Naziv</string>
+    <string name="cartproductquantity">Količina</string>
+    <string name="cartproductprice">Cijena</string>
+
+
+</resources>
