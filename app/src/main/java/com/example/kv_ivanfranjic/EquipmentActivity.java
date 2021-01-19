@@ -52,11 +52,6 @@ public class EquipmentActivity extends AppCompatActivity {
                         startActivity(intent3);
                         break;
 
-                    case R.id.ic_services:
-                        Intent intent2 = new Intent(EquipmentActivity.this, ServicesActivity.class);
-                        startActivity(intent2);
-                        break;
-
                     case R.id.ic_equipment:
 
                         break;
@@ -64,6 +59,11 @@ public class EquipmentActivity extends AppCompatActivity {
                     case R.id.ic_fastfood:
                         Intent intent4 = new Intent(EquipmentActivity.this, FoodActivity.class);
                         startActivity(intent4);
+                        break;
+
+                    case R.id.ic_cart:
+                        Intent intent2 = new Intent(EquipmentActivity.this, CartActivity.class);
+                        startActivity(intent2);
                         break;
                 }
 
@@ -113,7 +113,7 @@ public class EquipmentActivity extends AppCompatActivity {
             Intent intent2 = new Intent(EquipmentActivity.this, CartActivity.class);
             startActivity(intent2);
         }
-        else if(id==R.id.basket)
+        else if(id==R.id.filter)
         {
             Intent intent = new Intent(EquipmentActivity.this, CartActivity.class);
             startActivity(intent);

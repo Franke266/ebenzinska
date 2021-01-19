@@ -1,12 +1,17 @@
 package com.example.kv_ivanfranjic;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -19,6 +24,38 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
+        bottomNavigationView.setSelectedItemId(R.id.ic_cart);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.ic_fuel:
+                        Intent intent4 = new Intent(CartActivity.this, FuelActivity.class);
+                        startActivity(intent4);
+                        break;
+
+                    case R.id.ic_equipment:
+                        Intent intent3 = new Intent(CartActivity.this, EquipmentActivity.class);
+                        startActivity(intent3);
+                        break;
+
+                    case R.id.ic_fastfood:
+                        Intent intent2 = new Intent(CartActivity.this, FoodActivity.class);
+                        startActivity(intent2);
+                        break;
+
+                    case R.id.ic_cart:
+
+                        break;
+                }
+
+
+                return false;
+            }
+        });
 
         recyclerView = findViewById(R.id.cartitems);
         recyclerView.setHasFixedSize(true);

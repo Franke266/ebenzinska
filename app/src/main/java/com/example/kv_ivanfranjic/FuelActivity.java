@@ -66,11 +66,6 @@ public class FuelActivity extends AppCompatActivity{
 
                         break;
 
-                    case R.id.ic_services:
-                        Intent intent2 = new Intent(FuelActivity.this, ServicesActivity.class);
-                        startActivity(intent2);
-                        break;
-
                     case R.id.ic_equipment:
                         Intent intent3 = new Intent(FuelActivity.this, EquipmentActivity.class);
                         startActivity(intent3);
@@ -79,6 +74,11 @@ public class FuelActivity extends AppCompatActivity{
                     case R.id.ic_fastfood:
                         Intent intent4 = new Intent(FuelActivity.this, FoodActivity.class);
                         startActivity(intent4);
+                        break;
+
+                    case R.id.ic_cart:
+                        Intent intent2 = new Intent(FuelActivity.this, CartActivity.class);
+                        startActivity(intent2);
                         break;
                 }
 
@@ -116,35 +116,32 @@ public class FuelActivity extends AppCompatActivity{
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         switch(position){
                             case 0:
-                                for(DataSnapshot fueldata: dataSnapshot.getChildren()) {
-                                    //fuelid = fueldata.child("id").getValue().toString();
-                                    //fuelname = fueldata.child("naziv").getValue().toString();
-                                    fuelprice = fueldata.child("cijena").getValue().toString();
-                                    //currentvalue = fueldata.child("stanje").getValue().toString();
-                                }
+                                fuelid = dataSnapshot.child("0").child("id").getValue().toString();
+                                fuelname = dataSnapshot.child("0").child("naziv").getValue().toString();
+                                fuelprice = dataSnapshot.child("0").child("cijena").getValue().toString();
+                                currentvalue = dataSnapshot.child("0").child("stanje").getValue().toString();
+
                                 /*selectedvalue = fuelquantity.getText().toString();
                                 ukupno=(Double.valueOf(fuelprice)*Double.valueOf(selectedvalue));
                                 totalfuelprice.setText(ukupno+"");*/
                                 break;
                             case 1:
-                                for(DataSnapshot fueldata: dataSnapshot.getChildren()) {
-                                    //fuelid = fueldata.child("id").getValue().toString();
-                                    //fuelname = fueldata.child("naziv").getValue().toString();
-                                    fuelprice = fueldata.child("cijena").getValue().toString();
-                                    //currentvalue = fueldata.child("stanje").getValue().toString();
-                                }
+                                fuelid = dataSnapshot.child("1").child("id").getValue().toString();
+                                fuelname = dataSnapshot.child("1").child("naziv").getValue().toString();
+                                fuelprice = dataSnapshot.child("1").child("cijena").getValue().toString();
+                                currentvalue = dataSnapshot.child("1").child("stanje").getValue().toString();
+
                                 /*selectedvalue = fuelquantity.getText().toString();
                                 ukupno=(Double.valueOf(fuelprice)*Double.valueOf(selectedvalue));
                                 totalfuelprice.setText(ukupno+"");*/
 
                                 break;
                             case 2:
-                                for(DataSnapshot fueldata: dataSnapshot.getChildren()) {
-                                    fuelid = fueldata.child("id").getValue().toString();
-                                    fuelname = fueldata.child("naziv").getValue().toString();
-                                    fuelprice = fueldata.child("cijena").getValue().toString();
-                                    currentvalue = fueldata.child("stanje").getValue().toString();
-                                }
+                                fuelid = dataSnapshot.child("2").child("id").getValue().toString();
+                                fuelname = dataSnapshot.child("2").child("naziv").getValue().toString();
+                                fuelprice = dataSnapshot.child("2").child("cijena").getValue().toString();
+                                currentvalue = dataSnapshot.child("2").child("stanje").getValue().toString();
+
                                 /*selectedvalue = fuelquantity.getText().toString();
                                 ukupno=(Double.valueOf(fuelprice)*Double.valueOf(selectedvalue));
                                 totalfuelprice.setText(ukupno+"");*/

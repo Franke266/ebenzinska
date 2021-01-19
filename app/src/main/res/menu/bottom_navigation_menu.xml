@@ -9,11 +9,6 @@
         android:title="Gorivo"
         />
     <item
-        android:id="@+id/ic_services"
-        android:icon="@drawable/ic_services"
-        android:title="Usluge"
-        />
-    <item
         android:id="@+id/ic_equipment"
         android:icon="@drawable/ic_equipment"
         android:title="Oprema"
@@ -22,5 +17,10 @@
         android:id="@+id/ic_fastfood"
         android:icon="@drawable/ic_fastfood"
         android:title="Hrana"
+        />
+    <item
+        android:id="@+id/ic_cart"
+        android:icon="@drawable/ic_basket"
+        android:title="Košarica"
         />
 </menu>

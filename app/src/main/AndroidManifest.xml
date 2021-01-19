@@ -14,7 +14,6 @@
         android:theme="@style/Theme.KV_IvanFranjic"
         tools:replace="android:theme">
         <activity android:name=".CartActivity"></activity>
-        <activity android:name=".ServicesActivity" />
         <activity android:name=".FuelActivity" />
         <activity android:name=".EquipmentActivity" />
         <activity android:name=".FoodActivity" />

@@ -10,9 +10,9 @@
         app:actionViewClass="android.widget.SearchView"/>
 
     <item
-        android:title="Košarica"
-        android:id="@+id/basket"
-        android:icon="@drawable/ic_basket"
+        android:title="Filter"
+        android:id="@+id/filter"
+        android:icon="@drawable/ic_services"
         app:showAsAction="always"/>
 
 </menu>
