@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FoodDetailsActivity">
+
+    <ImageView
+        android:id="@+id/food_details_image"
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:scaleType="centerCrop"/>
+
+    <TextView
+        android:id="@+id/food_details_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/food_details_image"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/food_details_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/food_details_name"
+        android:textSize="15sp"
+        android:gravity="left"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/food_details_price"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/food_details_description"
+        android:textSize="18sp"
+        android:gravity="left"
+        android:layout_marginTop="15dp"/>
+
+    <com.cepheuen.elegantnumberbutton.view.ElegantNumberButton
+           android:id="@+id/foodquantity"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:elevation="6dp"
+           android:layout_centerHorizontal="true"
+           app:textSize="16dp"
+           app:initialNumber="1"
+           app:finalNumber="10"
+           android:layout_below="@+id/food_details_price"
+        android:layout_marginTop="10dp"/>
+
+       <Button
+           android:id="@+id/addtocartfood"
+           android:layout_width="300dp"
+           android:layout_height="wrap_content"
+           android:elevation="6dp"
+           android:layout_centerHorizontal="true"
+           android:layout_below="@+id/foodquantity"
+           android:layout_marginTop="150dp"
+           android:text="@string/addtocart"
+           />
+
+
+</RelativeLayout>

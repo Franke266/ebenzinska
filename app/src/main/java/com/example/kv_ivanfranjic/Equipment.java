@@ -1,18 +1,16 @@
 package com.example.kv_ivanfranjic;
 
 public class Equipment {
-    private String naziv;
-    private String cijena;
-    private String slika;
-    // private boolean permission;
+    private String naziv, cijena, slika, id;
 
     public Equipment() {
     }
 
-    public Equipment(String naziv, String cijena, String slika) {
+    public Equipment(String naziv, String cijena, String slika, String id) {
         this.naziv = naziv;
         this.cijena = cijena;
         this.slika = slika;
+        this.id = id;
     }
 
     public String getNaziv() {
@@ -40,4 +38,13 @@ public class Equipment {
     public void setSlika(String slika) {
         this.slika = slika;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
 }

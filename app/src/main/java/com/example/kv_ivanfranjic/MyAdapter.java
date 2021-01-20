@@ -20,39 +20,34 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>/* implements Filterable */{
+import Interface.itemClickListener;
 
-        Context context;
-        ArrayList<Food> hrana;
-        //ArrayList<Food> hranasva;
+public class MyAdapter extends RecyclerView.ViewHolder implements View.OnClickListener/* implements Filterable */{
 
-public MyAdapter(Context c , ArrayList<Food> h)
-        {
-        context = c;
-        hrana = h;
-        //hranasva = new ArrayList<>(hrana);
+    TextView foodproductname,foodproductprice;
+    ImageView foodproductimg;
+    itemClickListener listener;
+
+        public MyAdapter(View itemView){
+            super(itemView);
+
+            foodproductname = (TextView) itemView.findViewById(R.id.foodproductname);
+            foodproductprice = (TextView) itemView.findViewById(R.id.foodproductprice);
+            foodproductimg = (ImageView) itemView.findViewById(R.id.foodproductimg);
         }
 
-@NonNull
-@Override
-public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(context).inflate(R.layout.cardview,parent,false));
+        public void setitemClickListener(itemClickListener listener){
+
+            this.listener=listener;
         }
 
-@Override
-public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-    holder.foodproductname.setText(hrana.get(position).getNaziv());
-    holder.foodproductprice.setText(hrana.get(position).getCijena());
-    Picasso.get().load(hrana.get(position).getSlika()).into(holder.foodproductimg);
-    holder.onClick(position);
+    @Override
+    public void onClick(View view) {
+        listener.onClick(view, getAdapterPosition(), false) ;
+    }
+
+
 }
-
-@Override
-public int getItemCount() {
-
-    return hrana.size();
-        }
-
    /* @Override
     public Filter getFilter() {
         return filter;
@@ -79,36 +74,3 @@ public int getItemCount() {
         }
     };*/
 
-    class MyViewHolder extends RecyclerView.ViewHolder
-{
-    TextView foodproductname,foodproductprice;
-    ImageView foodproductimg;
-    Button addtocart;
-
-    public MyViewHolder(View itemView) {
-        super(itemView);
-        foodproductname = (TextView) itemView.findViewById(R.id.foodproductname);
-        foodproductprice = (TextView) itemView.findViewById(R.id.foodproductprice);
-        foodproductimg = (ImageView) itemView.findViewById(R.id.foodproductimg);
-        addtocart = (Button) itemView.findViewById(R.id.addtocart);
-    }
-
-    public void onClick(int position)
-    {
-        addtocart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, position+"", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
-
-
-
-
-}
-
-
-
-}

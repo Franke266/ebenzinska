@@ -10,43 +10,50 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
 
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class FoodActivity extends AppCompatActivity {
 
-    DatabaseReference reference;
+    DatabaseReference FoodRef;
     RecyclerView recyclerView;
-    ArrayList<Food> list;
-    MyAdapter adapter;
-    private ElegantNumberButton foodquantity;
+    RecyclerView.LayoutManager layoutManager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
         bottomNavigationView.setSelectedItemId(R.id.ic_fastfood);
-        foodquantity = (ElegantNumberButton) findViewById(R.id.foodquantity);
+        FoodRef=FirebaseDatabase.getInstance().getReference().child("Hrana");
+        recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -77,29 +84,42 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
-        recyclerView.setLayoutManager( new LinearLayoutManager(this));
+    }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>().setQuery(FoodRef, Food.class).build();
 
-        reference = FirebaseDatabase.getInstance().getReference().child("Hrana");
-        reference.addValueEventListener(new ValueEventListener() {
+        FirebaseRecyclerAdapter<Food, MyAdapter> adapter = new FirebaseRecyclerAdapter<Food, MyAdapter>(options) {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list = new ArrayList<Food>();
-                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
-                {
-                    Food h = dataSnapshot1.getValue(Food.class);
-                    list.add(h);
-                }
-                adapter = new MyAdapter(FoodActivity.this,list);
-                recyclerView.setAdapter(adapter);
+            protected void onBindViewHolder(@NonNull MyAdapter holder, int position, @NonNull Food model) {
+                holder.foodproductname.setText(model.getNaziv());
+                holder.foodproductprice.setText(model.getCijena());
+                Picasso.get().load(model.getSlika()).into(holder.foodproductimg);
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(FoodActivity.this, FoodDetailsActivity.class);
+                        intent.putExtra("id", model.getId());
+                        startActivity(intent);
+                    }
+                });
             }
 
+            @NonNull
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(FoodActivity.this, "Error", Toast.LENGTH_SHORT).show();
+            public MyAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview, parent, false);
+                MyAdapter holder=new MyAdapter(view);
+                return holder;
             }
-        });
+        };
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
+
+
     }
 
     @Override

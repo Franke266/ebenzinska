@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -21,21 +23,23 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class FuelActivity extends AppCompatActivity{
-    Context context;
-    DatabaseReference reference;
+    //Context context;
+    DatabaseReference FuelRef;
     RecyclerView recyclerView;
-    ArrayList<Fuel> list;
-    MyAdapter3 adapter;
+    RecyclerView.LayoutManager layoutManager;
     Spinner fuelspinner;
     ArrayAdapter<String> adapter2;
     ArrayList<String> spinnerDataList;
@@ -55,6 +59,11 @@ public class FuelActivity extends AppCompatActivity{
         bottomNavigationView.setSelectedItemId(R.id.ic_fuel);
         fuelquantity= findViewById(R.id.fuelquantity);
         totalfuelprice=findViewById(R.id.fueltotalprice);
+        FuelRef=FirebaseDatabase.getInstance().getReference().child("Spremnik");
+        recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
+        recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
 
 
 
@@ -87,29 +96,17 @@ public class FuelActivity extends AppCompatActivity{
             }
         });
 
-        recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
-        recyclerView.setLayoutManager( new LinearLayoutManager(this));
-
-        reference = FirebaseDatabase.getInstance().getReference().child("Spremnik");
         spinnerDataList = new ArrayList<>();
         adapter2 = new ArrayAdapter<String>(FuelActivity.this, android.R.layout.simple_spinner_dropdown_item,spinnerDataList);
-        reference.addValueEventListener(new ValueEventListener() {
+        FuelRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                list = new ArrayList<Fuel>();
-                for(DataSnapshot dataSnapshot1: dataSnapshot.getChildren())
-                {
-                    Fuel f = dataSnapshot1.getValue(Fuel.class);
-                    list.add(f);
-                }
                 for(DataSnapshot spinnerfueldata: dataSnapshot.getChildren())
                 {
                     String fuelname = spinnerfueldata.child("naziv").getValue().toString();
                     spinnerDataList.add(fuelname);
 
                 }
-                adapter = new MyAdapter3(FuelActivity.this,list);
-                recyclerView.setAdapter(adapter);
                 fuelspinner.setAdapter(adapter2);
                 fuelspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     @Override
@@ -167,6 +164,32 @@ public class FuelActivity extends AppCompatActivity{
                 Toast.makeText(FuelActivity.this, "Error", Toast.LENGTH_SHORT).show();
             }
         });
+
+
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        FirebaseRecyclerOptions<Fuel> options = new FirebaseRecyclerOptions.Builder<Fuel>().setQuery(FuelRef, Fuel.class).build();
+
+        FirebaseRecyclerAdapter<Fuel, MyAdapter3> adapter = new FirebaseRecyclerAdapter<Fuel, MyAdapter3>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull MyAdapter3 holder, int position, @NonNull Fuel model) {
+                holder.fuelname.setText(model.getNaziv());
+                holder.fueltotalprice.setText(model.getCijena());
+            }
+
+            @NonNull
+            @Override
+            public MyAdapter3 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview3, parent, false);
+                MyAdapter3 holder=new MyAdapter3(view);
+                return holder;
+            }
+        };
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
 
 
     }

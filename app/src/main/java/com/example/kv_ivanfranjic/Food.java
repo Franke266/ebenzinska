@@ -1,28 +1,23 @@
 package com.example.kv_ivanfranjic;
 
 public class Food {
-    private String naziv;
-    private String cijena;
-    private String slika;
-   // private boolean permission;
+    private String naziv, cijena, slika, id;
 
     public Food() {
     }
 
-    public Food(String naziv, String cijena, String slika/*, boolean permission*/) {
+    public Food(String naziv, String cijena, String slika, String id) {
         this.naziv = naziv;
         this.cijena = cijena;
         this.slika = slika;
-        //this.permission = permission;
+        this.id = id;
     }
 
     public String getNaziv() {
-
         return naziv;
     }
 
     public void setNaziv(String naziv) {
-
         this.naziv = naziv;
     }
 
@@ -42,11 +37,12 @@ public class Food {
         this.slika = slika;
     }
 
-    /*public boolean getPermission() {
-        return permission;
+    public String getId() {
+
+        return id;
     }
 
-    public void setPermission(boolean permission) {
-        this.permission = permission;
-    }*/
+    public void setId(String id){
+        this.id = id;
+    }
 }

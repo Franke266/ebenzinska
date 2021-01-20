@@ -16,41 +16,18 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class MyAdapter3 extends RecyclerView.Adapter<MyAdapter3.MyViewHolder3> {
+import Interface.itemClickListener;
 
-    Context context;
-    ArrayList<Fuel> fuel;
+public class MyAdapter3 extends RecyclerView.ViewHolder {
 
-    public MyAdapter3(Context c , ArrayList<Fuel> f)
-    {
-        context = c;
-        fuel = f;
+    TextView fuelname,fueltotalprice;
+
+    public MyAdapter3(View itemView){
+        super(itemView);
+
+        fuelname = (TextView) itemView.findViewById(R.id.fuelname);
+        fueltotalprice = (TextView) itemView.findViewById(R.id.fueltotalprice);
     }
 
-    @NonNull
-    @Override
-    public MyAdapter3.MyViewHolder3 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyAdapter3.MyViewHolder3(LayoutInflater.from(context).inflate(R.layout.cardview3,parent,false));
-    }
 
-    @Override
-    public void onBindViewHolder(@NonNull MyAdapter3.MyViewHolder3 holder, int position) {
-        holder.fuelname.setText(fuel.get(position).getNaziv());
-        holder.fueltotalprice.setText(fuel.get(position).getCijena());
-    }
-
-    @Override
-    public int getItemCount() {
-        return fuel.size();
-    }
-
-    class MyViewHolder3 extends RecyclerView.ViewHolder
-    {
-        TextView fuelname,fueltotalprice;
-        public MyViewHolder3(View itemView) {
-            super(itemView);
-            fuelname = (TextView) itemView.findViewById(R.id.fuelname);
-            fueltotalprice = (TextView) itemView.findViewById(R.id.fueltotalprice);
-        }
-    }
 }
