@@ -1,24 +1,38 @@
 package com.example.kv_ivanfranjic;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class CartActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
-    private Button checkout;
-    private TextView totalprice;
+    RecyclerView recyclerView;
+    RecyclerView.LayoutManager layoutManager;
+    Button checkout;
+    TextView totalprice;
+    Double totalpricecart= 0.0;
+    String productprice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,113 +80,68 @@ public class CartActivity extends AppCompatActivity {
         totalprice = findViewById(R.id.totalprice);
     }
 
-   /* RecyclerView recycler_itemlist;
-    public static TextView tv_total;
-    CartListAdapter cartListAdapter;
-    public static int total=0;
-    String jsonCartList;
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_kosarica);
+    protected void onStart() {
+        super.onStart();
+        final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart list");
+        FirebaseRecyclerOptions<Cart> options = new FirebaseRecyclerOptions.Builder<Cart>().setQuery(cartListRef.child("Products"), Cart.class).build();
+        FirebaseRecyclerAdapter<Cart, MyAdapter4> adapter = new FirebaseRecyclerAdapter<Cart, MyAdapter4>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull MyAdapter4 holder, int position, @NonNull Cart model) {
+                holder.cartproductname.setText(model.getName());
+                holder.cartproductprice.setText(model.getPrice());
+                holder.cartproductquantity.setText("Količina"+" "+model.getQuantity());
 
-        //Set back button to activity
-        android.support.v7.app.ActionBar actionBar=getSupportActionBar();
-        if(actionBar!=null){
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setTitle("Cart");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+                productprice = model.getPrice();
+                totalpricecart = totalpricecart + Double.parseDouble(productprice);
+                totalprice.setText(totalpricecart.toString());
 
-        tv_total =(TextView) findViewById(R.id.tv_total);
-
-        recycler_itemlist =(RecyclerView) findViewById(R.id.recycler_cart);
-        recycler_itemlist.setHasFixedSize(true);
-        recycler_itemlist.setRecycledViewPool(new RecyclerView.RecycledViewPool());
-        recycler_itemlist.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));
-        recycler_itemlist.getRecycledViewPool().setMaxRecycledViews(0, 0);
-
-        cartListAdapter = new CartListAdapter(KosaricaActivity.this,ItemListAdapter.selecteditems);
-        recycler_itemlist.setAdapter(cartListAdapter);
-
-        getIntentData();
-
-        calculateTotal();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                // app icon in action bar clicked; goto parent activity.
-                this.finish();
-                return true;
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    private void getIntentData(){
-        if(getIntent()!=null && getIntent().getExtras()!=null){
-            // Get the Required Parameters for sending Order to server.
-        }
-    }
-
-    public static void calculateTotal(){
-        int i=0;
-        total=0;
-        while(i<ItemListAdapter.selecteditems.size()){
-            total=total + ( Integer.valueOf(ItemListAdapter.selecteditems.get(i).getRate()) * Integer.valueOf(ItemListAdapter.selecteditems.get(i).getQuantity()) );
-            i++;
-        }
-        tv_total.setText(""+total);
-    }
-
-    public void insertOrder(View view){
-
-        if(total>0){
-
-            Gson gson = new Gson();
-            jsonCartList = gson.toJson(ItemListAdapter.selecteditems);
-
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which){
-                        case DialogInterface.BUTTON_POSITIVE:
-                            //Yes button clicked
-                            placeOrderRequest();
-                            break;
-
-                        case DialogInterface.BUTTON_NEGATIVE:
-                            //No button clicked
-                            break;
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        CharSequence options[] = new CharSequence[]{
+                                "Uredi",
+                                "Obriši"
+                        };
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CartActivity.this);
+                        builder.setTitle("Uredi artikl:");
+                        builder.setItems(options, new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i){
+                                if(i == 0){
+                                    Intent intent= new Intent(CartActivity.this, EquipmentDetailsActivity.class);
+                                    intent.putExtra("id", model.getId());
+                                    startActivity(intent);
+                                }
+                                if( i == 1){
+                                    cartListRef.child("Products").child(model.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.isSuccessful()){
+                                                Toast.makeText(CartActivity.this, "Artikl je uklonjen!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                        builder.show();
                     }
-                }
-            };
+                });
+            }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(KosaricaActivity.this);
-            builder.setMessage("Do you want to place Order ?").setPositiveButton("Yes", dialogClickListener)
-                    .setNegativeButton("No", dialogClickListener).show();
+            @NonNull
+            @Override
+            public MyAdapter4 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.cart_items, parent, false);
+                MyAdapter4 holder = new MyAdapter4(view);
+                return holder;
+            }
+        };
 
-        }else{
-            Toast.makeText(KosaricaActivity.this,"No items in Cart !",Toast.LENGTH_LONG).show();
-        }
-
-
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
     }
-
-
-    private void placeOrderRequest(){
-        //Send Request to Server with required Parameters
-
-   jsonCartList - Consists of Objects of all product selected.
-
-
-    }*/
-
 }
 
 

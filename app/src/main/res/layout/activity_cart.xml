@@ -35,8 +35,9 @@
         android:id="@+id/checkout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_above="@+id/bottomNavView_Bar"
         android:text="@string/cart_placeorder"
+        android:backgroundTint="@color/green"
         android:textColor="@android:color/white"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
