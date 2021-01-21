@@ -27,12 +27,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class CartActivity extends AppCompatActivity {
 
-    RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
+    RecyclerView recyclerView, recyclerView2;
+    RecyclerView.LayoutManager layoutManager, layoutManager2;
     Button checkout;
     TextView totalprice;
-    Double totalpricecart= 0.0;
-    String productprice;
+    Double totalpricecart=0.0;
+    String productprice, productprice2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,11 +73,25 @@ public class CartActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.cartitems);
         recyclerView.setHasFixedSize(true);
-        layoutManager=new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView2 = findViewById(R.id.cartitems2);
+        recyclerView2.setHasFixedSize(true);
+        layoutManager2 = new LinearLayoutManager(this);
+        recyclerView2.setLayoutManager(layoutManager2);
 
         checkout = findViewById(R.id.checkout);
         totalprice = findViewById(R.id.totalprice);
+
+        checkout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(CartActivity.this, ConfirmOrder.class);
+                intent.putExtra("Total price", totalpricecart.toString());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -89,12 +103,12 @@ public class CartActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter4 holder, int position, @NonNull Cart model) {
                 holder.cartproductname.setText(model.getName());
-                holder.cartproductprice.setText(model.getPrice());
+                holder.cartproductprice.setText("Cijena "+(String.format("%.02f", Double.parseDouble(model.getPrice())))+" kn");
                 holder.cartproductquantity.setText("Količina"+" "+model.getQuantity());
 
                 productprice = model.getPrice();
                 totalpricecart = totalpricecart + Double.parseDouble(productprice);
-                totalprice.setText(totalpricecart.toString());
+                totalprice.setText("Ukupno: "+(String.format("%.02f", totalpricecart))+" kn");
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -119,6 +133,8 @@ public class CartActivity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()){
                                                 Toast.makeText(CartActivity.this, "Artikl je uklonjen!", Toast.LENGTH_SHORT).show();
+                                                Intent intent= new Intent(CartActivity.this, CartActivity.class);
+                                                startActivity(intent);
                                             }
                                         }
                                     });
@@ -139,8 +155,61 @@ public class CartActivity extends AppCompatActivity {
             }
         };
 
+        FirebaseRecyclerOptions<Cart> options2 = new FirebaseRecyclerOptions.Builder<Cart>().setQuery(cartListRef.child("Fuel"), Cart.class).build();
+        FirebaseRecyclerAdapter<Cart, MyAdapter4> adapter2 = new FirebaseRecyclerAdapter<Cart, MyAdapter4>(options2) {
+            @Override
+            protected void onBindViewHolder(@NonNull MyAdapter4 holder2, int position2, @NonNull Cart model2) {
+                holder2.cartproductname.setText(model2.getName());
+                holder2.cartproductprice.setText("Cijena "+(String.format("%.02f", Double.parseDouble(model2.getPrice())))+" kn");
+                holder2.cartproductquantity.setText("Količina"+" "+model2.getQuantity()+" l");
+
+                productprice2 = model2.getPrice();
+                totalpricecart = totalpricecart + Double.parseDouble(productprice2);
+                totalprice.setText("Ukupno: "+(String.format("%.02f", totalpricecart))+" kn");
+
+                holder2.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view2) {
+                        CharSequence options2[] = new CharSequence[]{
+                                "Obriši"
+                        };
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(CartActivity.this);
+                        builder2.setTitle("Jeste li sigurni da želite obrisati?");
+                        builder2.setItems(options2, new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialogInterface2, int i){
+                                if( i == 0){
+                                    cartListRef.child("Fuel").child(model2.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task2) {
+                                            if (task2.isSuccessful()){
+                                                Toast.makeText(CartActivity.this, "Artikl je uklonjen!", Toast.LENGTH_SHORT).show();
+                                                Intent intent2= new Intent(CartActivity.this, CartActivity.class);
+                                                startActivity(intent2);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                        builder2.show();
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public MyAdapter4 onCreateViewHolder(@NonNull ViewGroup parent2, int viewType) {
+                View view2 = LayoutInflater.from(parent2.getContext()).inflate(R.layout.cart_items, parent2, false);
+                MyAdapter4 holder2 = new MyAdapter4(view2);
+                return holder2;
+            }
+        };
+
         recyclerView.setAdapter(adapter);
         adapter.startListening();
+        recyclerView2.setAdapter(adapter2);
+        adapter2.startListening();
     }
 }
 

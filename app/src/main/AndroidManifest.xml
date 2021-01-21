@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.KV_IvanFranjic"
         tools:replace="android:theme">
-        <activity android:name=".EquipmentDetailsActivity"></activity>
+        <activity android:name=".ConfirmOrder"></activity>
+        <activity android:name=".EquipmentDetailsActivity" />
         <activity android:name=".FoodDetailsActivity" />
         <activity android:name=".CartActivity" />
         <activity android:name=".FuelActivity" />

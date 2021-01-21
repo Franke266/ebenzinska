@@ -25,6 +25,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,10 +35,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class FuelActivity extends AppCompatActivity{
-    //Context context;
     DatabaseReference FuelRef;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -45,14 +49,17 @@ public class FuelActivity extends AppCompatActivity{
     ArrayList<String> spinnerDataList;
     EditText fuelquantity;
     TextView totalfuelprice;
-    double ukupno;
-    String  selectedvalue, fuelprice, currentvalue, fuelname, fuelid;
+    Double totalprice=0.0;
+    Double totalfuelquantity;
+    Double fuelprice2;
+    String fuelprice, currentvalue, fuelname, fuelid;
     Button potvrdi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fuel);
+
         potvrdi=(Button) findViewById(R.id.fuelsubmit);
         fuelspinner = (Spinner) findViewById(R.id.spFuel);
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
@@ -65,7 +72,12 @@ public class FuelActivity extends AppCompatActivity{
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-
+        potvrdi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addingToCartList();
+            }
+        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -96,6 +108,7 @@ public class FuelActivity extends AppCompatActivity{
             }
         });
 
+
         spinnerDataList = new ArrayList<>();
         adapter2 = new ArrayAdapter<String>(FuelActivity.this, android.R.layout.simple_spinner_dropdown_item,spinnerDataList);
         FuelRef.addValueEventListener(new ValueEventListener() {
@@ -116,32 +129,19 @@ public class FuelActivity extends AppCompatActivity{
                                 fuelid = dataSnapshot.child("0").child("id").getValue().toString();
                                 fuelname = dataSnapshot.child("0").child("naziv").getValue().toString();
                                 fuelprice = dataSnapshot.child("0").child("cijena").getValue().toString();
-                                currentvalue = dataSnapshot.child("0").child("stanje").getValue().toString();
-
-                                /*selectedvalue = fuelquantity.getText().toString();
-                                ukupno=(Double.valueOf(fuelprice)*Double.valueOf(selectedvalue));
-                                totalfuelprice.setText(ukupno+"");*/
+                                //currentvalue = dataSnapshot.child("0").child("stanje").getValue().toString();
                                 break;
                             case 1:
                                 fuelid = dataSnapshot.child("1").child("id").getValue().toString();
                                 fuelname = dataSnapshot.child("1").child("naziv").getValue().toString();
                                 fuelprice = dataSnapshot.child("1").child("cijena").getValue().toString();
-                                currentvalue = dataSnapshot.child("1").child("stanje").getValue().toString();
-
-                                /*selectedvalue = fuelquantity.getText().toString();
-                                ukupno=(Double.valueOf(fuelprice)*Double.valueOf(selectedvalue));
-                                totalfuelprice.setText(ukupno+"");*/
-
+                                //currentvalue = dataSnapshot.child("1").child("stanje").getValue().toString();
                                 break;
                             case 2:
                                 fuelid = dataSnapshot.child("2").child("id").getValue().toString();
                                 fuelname = dataSnapshot.child("2").child("naziv").getValue().toString();
                                 fuelprice = dataSnapshot.child("2").child("cijena").getValue().toString();
-                                currentvalue = dataSnapshot.child("2").child("stanje").getValue().toString();
-
-                                /*selectedvalue = fuelquantity.getText().toString();
-                                ukupno=(Double.valueOf(fuelprice)*Double.valueOf(selectedvalue));
-                                totalfuelprice.setText(ukupno+"");*/
+                                //currentvalue = dataSnapshot.child("2").child("stanje").getValue().toString();
                                 break;
                         }
 
@@ -165,6 +165,43 @@ public class FuelActivity extends AppCompatActivity{
             }
         });
 
+
+    }
+
+    private void addingToCartList() {
+
+        String saveCurrentTime, saveCurrentDate;
+        Calendar calForDate = Calendar.getInstance();
+        SimpleDateFormat currentDate = new SimpleDateFormat("dd, MMM, yyyy");
+        saveCurrentDate = currentDate.format(calForDate.getTime());
+
+        /*SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+        saveCurrentTime = currentDate.format(calForDate.getTime());*/
+
+        DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart list");
+        totalfuelquantity = Double.parseDouble(fuelquantity.getText().toString());
+        fuelprice2 = Double.parseDouble(fuelprice);
+        totalprice = totalfuelquantity*fuelprice2;
+
+        final HashMap<String, Object> cartMap = new HashMap<>();
+        cartMap.put("id", fuelid);
+        cartMap.put("name", fuelname);
+        cartMap.put("price", totalprice.toString());
+        cartMap.put("date", saveCurrentDate);
+        /*cartMap.put("time", saveCurrentTime);*/
+        cartMap.put("quantity", fuelquantity.getText().toString());
+
+        cartListRef.child("Fuel").child(fuelid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful())
+                {
+                    Toast.makeText(FuelActivity.this, "Dodano u košaricu", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(FuelActivity.this, EquipmentActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
     }
 
