@@ -7,11 +7,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -24,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -34,6 +38,7 @@ public class EquipmentActivity extends AppCompatActivity {
     DatabaseReference EquipRef;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
+    EditText searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,32 @@ public class EquipmentActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        searchView= (EditText) findViewById(R.id.search);
+
+        LoadData("");
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString()!=null){
+                    LoadData(s.toString());
+                }
+                else{
+                    LoadData("");
+                }
+            }
+
+
+        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -81,11 +112,12 @@ public class EquipmentActivity extends AppCompatActivity {
 
     }
 
-    @Override
+    /*@Override
     protected void onStart(){
-        super.onStart();
-        FirebaseRecyclerOptions<Equipment> options = new FirebaseRecyclerOptions.Builder<Equipment>().setQuery(EquipRef, Equipment.class).build();
-
+        super.onStart();*/
+    private void LoadData(String data){
+        Query query =EquipRef.orderByChild("naziv").startAt(data).endAt(data+"\uf8ff");
+        FirebaseRecyclerOptions<Equipment> options = new FirebaseRecyclerOptions.Builder<Equipment>().setQuery(query, Equipment.class).build();
         FirebaseRecyclerAdapter<Equipment, MyAdapter2> adapter = new FirebaseRecyclerAdapter<Equipment, MyAdapter2>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter2 holder, int position, @NonNull Equipment model) {
@@ -128,12 +160,7 @@ public class EquipmentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
 
-        if(id==R.id.search)
-        {
-            Intent intent2 = new Intent(EquipmentActivity.this, CartActivity.class);
-            startActivity(intent2);
-        }
-        else if(id==R.id.filter)
+        if(id==R.id.filter)
         {
             Intent intent = new Intent(EquipmentActivity.this, CartActivity.class);
             startActivity(intent);

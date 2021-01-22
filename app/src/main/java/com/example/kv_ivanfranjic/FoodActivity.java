@@ -10,12 +10,15 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,16 +32,19 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FoodActivity extends AppCompatActivity {
 
     DatabaseReference FoodRef;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
+    EditText searchView;
 
 
     @Override
@@ -51,10 +57,36 @@ public class FoodActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
         bottomNavigationView.setSelectedItemId(R.id.ic_fastfood);
         FoodRef=FirebaseDatabase.getInstance().getReference().child("Hrana");
+        searchView = (EditText) findViewById(R.id.search);
         recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        LoadData("");
+        searchView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(s.toString()!=null){
+                    LoadData(s.toString());
+                }
+                else{
+                    LoadData("");
+                }
+            }
+
+
+        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -87,11 +119,12 @@ public class FoodActivity extends AppCompatActivity {
 
     }
 
-    @Override
+    /*@Override
     protected void onStart(){
-        super.onStart();
-        FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>().setQuery(FoodRef, Food.class).build();
-
+        super.onStart();*/
+    private void LoadData(String data){
+        Query query =FoodRef.orderByChild("naziv").startAt(data).endAt(data+"\uf8ff");
+        FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>().setQuery(query, Food.class).build();
         FirebaseRecyclerAdapter<Food, MyAdapter> adapter = new FirebaseRecyclerAdapter<Food, MyAdapter>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter holder, int position, @NonNull Food model) {
@@ -109,6 +142,7 @@ public class FoodActivity extends AppCompatActivity {
                 });
             }
 
+
             @NonNull
             @Override
             public MyAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -123,35 +157,18 @@ public class FoodActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
-        MenuItem menuItem=menu.findItem(R.id.search);
-        /*SearchView searchView=(SearchView) MenuItemCompat.getActionView(menuItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                adapter.getFilter().filter(newText);
-                return false;
-            }
-        });*/
-        return true;
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return  true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
 
-        /*if(id==R.id.search)
-        {
-            Intent intent2 = new Intent(FoodActivity.this, CartActivity.class);
-            startActivity(intent2);
-        }*/
         if(id==R.id.filter){
             Intent intent = new Intent(FoodActivity.this, CartActivity.class);
             startActivity(intent);

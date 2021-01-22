@@ -15,11 +15,25 @@
         app:title="Oprema"
         app:titleMarginStart="20dp"/>
 
+    <EditText
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar"
+        android:hint="Pretraži"
+        android:layout_margin="20dp"
+        android:paddingLeft="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:background="@drawable/input_search"
+        android:drawableRight="@drawable/ic_search"
+        android:paddingRight="10dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/myRecycler"
-        android:layout_marginTop="60dp"/>
+        android:layout_below="@+id/search" />
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:layout_width="match_parent"

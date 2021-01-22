@@ -28,14 +28,17 @@
         android:id="@+id/cartitems"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_below="@+id/top" />
+        android:layout_below="@+id/top"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartitems2"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="match_parent"
         android:layout_below="@+id/cartitems"
         android:layout_above="@+id/checkout"/>
+
+
 
     <Button
         android:id="@+id/checkout"

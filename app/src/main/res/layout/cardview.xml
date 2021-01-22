@@ -7,7 +7,7 @@
     android:orientation="horizontal">
 
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:orientation="vertical">
@@ -15,29 +15,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/foodproductname"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textSize="20sp"/>
 
         <TextView
+            android:id="@+id/pricetext"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="180dp"
             android:text="@string/price"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:layout_marginLeft="45dp"
+            android:layout_marginTop="180dp"
+            android:layout_toRightOf="@id/pricetext"
+            android:textSize="20sp"
             android:id="@+id/foodproductprice"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="180dp"
             android:layout_toRightOf="@id/foodproductprice"
             android:text="kn"
-            android:textSize="15sp" />
+            android:textSize="20sp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
 
 
 
@@ -47,9 +54,17 @@
         android:layout_height="match_parent"
         android:layout_weight="1">
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="200dp"
-            android:layout_marginLeft="45dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="50dp"
             android:id="@+id/foodproductimg"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"/>
+
     </RelativeLayout>
+
 </LinearLayout>
