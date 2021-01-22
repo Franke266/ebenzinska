@@ -36,6 +36,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
     Float totalfoodproductprice;
     Integer totalfoodproductquantity = 0;
     Float foodproductprice;
+    String foodimage="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         cartMap.put("date", saveCurrentDate);
         /*cartMap.put("time", saveCurrentTime);*/
         cartMap.put("quantity", foodquantity.getNumber());
+        cartMap.put("image", foodimage);
 
         cartListRef.child("Products").child(foodproductid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -109,6 +111,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
                     food_details_name.setText(food.getNaziv());
                     food_details_description.setText(food.getNaziv());
                     food_details_price.setText(food.getCijena());
+                    foodimage=food.getSlika();
                     Picasso.get().load(food.getSlika()).into(food_details_image);
                 }
             }

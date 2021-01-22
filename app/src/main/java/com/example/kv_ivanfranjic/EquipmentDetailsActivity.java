@@ -35,6 +35,7 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
     Float totalequipmentproductprice;
     Integer totalequipmentproductquantity = 0;
     Float equipmentproductprice;
+    String equipimage="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,7 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
         cartMap.put("date", saveCurrentDate);
         /*cartMap.put("time", saveCurrentTime);*/
         cartMap.put("quantity", equipquantity.getNumber());
+        cartMap.put("image", equipimage);
 
         cartListRef.child("Products").child(equipproductid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -109,6 +111,7 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
                     equip_details_name.setText(equip.getNaziv());
                     equip_details_description.setText(equip.getNaziv());
                     equip_details_price.setText(equip.getCijena());
+                    equipimage=equip.getSlika();
                     Picasso.get().load(equip.getSlika()).into(equip_details_image);
                 }
             }

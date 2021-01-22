@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -103,8 +105,9 @@ public class CartActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter4 holder, int position, @NonNull Cart model) {
                 holder.cartproductname.setText(model.getName());
-                holder.cartproductprice.setText("Cijena "+(String.format("%.02f", Double.parseDouble(model.getPrice())))+" kn");
-                holder.cartproductquantity.setText("Količina"+" "+model.getQuantity());
+                holder.cartproductprice.setText("Cijena: "+(String.format("%.02f", Double.parseDouble(model.getPrice())))+" kn");
+                holder.cartproductquantity.setText("Kol "+model.getQuantity());
+                Picasso.get().load(model.getImage()).into(holder.cartproductimage);
 
                 productprice = model.getPrice();
                 totalpricecart = totalpricecart + Double.parseDouble(productprice);
@@ -160,8 +163,9 @@ public class CartActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter4 holder2, int position2, @NonNull Cart model2) {
                 holder2.cartproductname.setText(model2.getName());
-                holder2.cartproductprice.setText("Cijena "+(String.format("%.02f", Double.parseDouble(model2.getPrice())))+" kn");
-                holder2.cartproductquantity.setText("Količina"+" "+model2.getQuantity()+" l");
+                holder2.cartproductprice.setText("Cijena: "+(String.format("%.02f", Double.parseDouble(model2.getPrice())))+" kn");
+                holder2.cartproductquantity.setText("Kol "+model2.getQuantity()+" l");
+                Picasso.get().load(model2.getImage()).into(holder2.cartproductimage);
 
                 productprice2 = model2.getPrice();
                 totalpricecart = totalpricecart + Double.parseDouble(productprice2);

@@ -48,11 +48,11 @@ public class FuelActivity extends AppCompatActivity{
     ArrayAdapter<String> adapter2;
     ArrayList<String> spinnerDataList;
     EditText fuelquantity;
-    TextView totalfuelprice;
+    //TextView totalfuelprice;
     Double totalprice=0.0;
     Double totalfuelquantity;
     Double fuelprice2;
-    String fuelprice, currentvalue, fuelname, fuelid;
+    String fuelprice, currentvalue, fuelname, fuelid, fuelimage;
     Button potvrdi;
 
     @Override
@@ -65,7 +65,7 @@ public class FuelActivity extends AppCompatActivity{
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
         bottomNavigationView.setSelectedItemId(R.id.ic_fuel);
         fuelquantity= findViewById(R.id.fuelquantity);
-        totalfuelprice=findViewById(R.id.fueltotalprice);
+        //totalfuelprice=findViewById(R.id.fueltotalprice);
         FuelRef=FirebaseDatabase.getInstance().getReference().child("Spremnik");
         recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
         recyclerView.setHasFixedSize(true);
@@ -108,7 +108,6 @@ public class FuelActivity extends AppCompatActivity{
             }
         });
 
-
         spinnerDataList = new ArrayList<>();
         adapter2 = new ArrayAdapter<String>(FuelActivity.this, android.R.layout.simple_spinner_dropdown_item,spinnerDataList);
         FuelRef.addValueEventListener(new ValueEventListener() {
@@ -129,18 +128,21 @@ public class FuelActivity extends AppCompatActivity{
                                 fuelid = dataSnapshot.child("0").child("id").getValue().toString();
                                 fuelname = dataSnapshot.child("0").child("naziv").getValue().toString();
                                 fuelprice = dataSnapshot.child("0").child("cijena").getValue().toString();
+                                fuelimage = dataSnapshot.child("0").child("image").getValue().toString();
                                 //currentvalue = dataSnapshot.child("0").child("stanje").getValue().toString();
                                 break;
                             case 1:
                                 fuelid = dataSnapshot.child("1").child("id").getValue().toString();
                                 fuelname = dataSnapshot.child("1").child("naziv").getValue().toString();
                                 fuelprice = dataSnapshot.child("1").child("cijena").getValue().toString();
+                                fuelimage = dataSnapshot.child("1").child("image").getValue().toString();
                                 //currentvalue = dataSnapshot.child("1").child("stanje").getValue().toString();
                                 break;
                             case 2:
                                 fuelid = dataSnapshot.child("2").child("id").getValue().toString();
                                 fuelname = dataSnapshot.child("2").child("naziv").getValue().toString();
                                 fuelprice = dataSnapshot.child("2").child("cijena").getValue().toString();
+                                fuelimage = dataSnapshot.child("2").child("image").getValue().toString();
                                 //currentvalue = dataSnapshot.child("2").child("stanje").getValue().toString();
                                 break;
                         }
@@ -190,6 +192,7 @@ public class FuelActivity extends AppCompatActivity{
         cartMap.put("date", saveCurrentDate);
         /*cartMap.put("time", saveCurrentTime);*/
         cartMap.put("quantity", fuelquantity.getText().toString());
+        cartMap.put("image", fuelimage);
 
         cartListRef.child("Fuel").child(fuelid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

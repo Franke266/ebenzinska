@@ -1,16 +1,17 @@
 package com.example.kv_ivanfranjic;
 
 public class Cart {
-    private String id, name, price, quantity;
+    private String id, name, price, quantity, image;
 
     public Cart() {
     }
 
-    public Cart(String id, String name, String price, String quantity) {
+    public Cart(String id, String name, String price, String quantity, String image) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
+        this.image= image;
     }
 
     public String getId() {
@@ -43,6 +44,14 @@ public class Cart {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
 
