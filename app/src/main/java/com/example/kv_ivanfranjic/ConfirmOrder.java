@@ -19,6 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.common.collect.Range;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class ConfirmOrder extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,7 +34,7 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
     EditText creditcardyear;
     EditText creditcardcvv;
     TextView showtotalpriceconfirm;
-    Button pay;
+    Button pay, back;
     String totalpriceconfirm = "";
     private AwesomeValidation awesomeValidation;
 
@@ -45,6 +51,15 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
         creditcardcvv = findViewById(R.id.confirmcvv);
         showtotalpriceconfirm = findViewById(R.id.totalpriceconfirm);
         pay = findViewById(R.id.pay);
+        back = findViewById(R.id.back);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ConfirmOrder.this, CartActivity.class);
+                startActivity(intent);
+            }
+        });
 
         totalpriceconfirm = getIntent().getStringExtra("Total price");
         Double totalpriceconfirm2=Double.parseDouble(totalpriceconfirm);
@@ -67,9 +82,45 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
     private void submitForm() {
         if (awesomeValidation.validate()) {
 
-                Toast.makeText(this, "Narudžba uspješno izvršena!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ConfirmOrder.this, FuelActivity.class);
-                startActivity(intent);
+            String saveCurrentTime, saveCurrentDate;
+            Calendar calForDate = Calendar.getInstance();
+            SimpleDateFormat currentDate = new SimpleDateFormat("dd, MMM, yyyy");
+            saveCurrentDate = currentDate.format(calForDate.getTime());
+
+            /*SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
+            saveCurrentTime = currentDate.format(calForDate.getTime());*/
+
+            DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference().child("Orders");
+            final HashMap<String, Object> cartMap = new HashMap<>();
+            cartMap.put("totalamount", totalpriceconfirm);
+            cartMap.put("name", firstlastname.getText().toString());
+            cartMap.put("cardnumber", creditcardnumber.getText().toString());
+            cartMap.put("date", saveCurrentDate);
+            /*cartMap.put("time", saveCurrentTime);*/
+            cartMap.put("monthexp", creditcardmonth.getText().toString());
+            cartMap.put("yearexp", creditcardyear.getText().toString());
+            cartMap.put("cvv", creditcardcvv.getText().toString());
+
+            ordersRef.child("Orders").updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if(task.isSuccessful())
+                    {
+                        FirebaseDatabase.getInstance().getReference().child("Cart list").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(ConfirmOrder.this, "Narudžba uspješno izvršena!", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(ConfirmOrder.this, FuelActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
+                        });
+
+                    }
+                }
+            });
+
             }
 
         }
@@ -80,4 +131,5 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
             submitForm();
         }
     }
+
 }

@@ -5,7 +5,8 @@
     <string name="credit_card_month">Lipanj</string>
     <string name="credit_card_year">2021</string>
     <string name="credit_card_cvv">123</string>
-    <string name="confirm_pay">Plati</string>
+    <string name="confirm_pay">Završi narudžbu</string>
+    <string name="confirm_back">Odustani</string>
     <string name="prompt_firstname_lastname">Ime i prezime</string>
     <string name="prompt_lastname">Prezime</string>
     <string name="prompt_email">E-mail</string>
