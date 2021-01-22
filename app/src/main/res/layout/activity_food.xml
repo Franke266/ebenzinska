@@ -15,7 +15,7 @@
         app:title="Hrana i piće"
         app:titleMarginStart="20dp"/>
 
-    <EditText
+    <!--<EditText
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,14 +27,14 @@
         android:paddingBottom="8dp"
         android:background="@drawable/input_search"
         android:drawableRight="@drawable/ic_search"
-        android:paddingRight="10dp"/>
+        android:paddingRight="10dp"/>-->
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/myRecycler"
-        android:layout_below="@id/search"
+        android:layout_below="@id/toolbar"
         android:layout_above="@id/bottomNavView_Bar" />
 
             <com.google.android.material.bottomnavigation.BottomNavigationView

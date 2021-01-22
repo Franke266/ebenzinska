@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -38,7 +39,7 @@ public class EquipmentActivity extends AppCompatActivity {
     DatabaseReference EquipRef;
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
-    EditText searchView;
+    //EditText searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +55,10 @@ public class EquipmentActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        searchView= (EditText) findViewById(R.id.search);
+        //searchView= (EditText) findViewById(R.id.search);
 
         LoadData("");
-        searchView.addTextChangedListener(new TextWatcher() {
+        /*searchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -79,7 +80,7 @@ public class EquipmentActivity extends AppCompatActivity {
             }
 
 
-        });
+        });*/
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -151,8 +152,23 @@ public class EquipmentActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
-        return true;
+        getMenuInflater().inflate(R.menu.menu, menu);
+        MenuItem item=menu.findItem(R.id.search);
+        SearchView searchView=(SearchView)item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String data) {
+                LoadData(data);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String data) {
+                LoadData(data);
+                return false;
+            }
+        });
+        return  true;
     }
 
 
