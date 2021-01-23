@@ -23,8 +23,11 @@ import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 public class CartActivity extends AppCompatActivity {
@@ -32,7 +35,7 @@ public class CartActivity extends AppCompatActivity {
     RecyclerView recyclerView, recyclerView2;
     RecyclerView.LayoutManager layoutManager, layoutManager2;
     Button checkout;
-    TextView totalprice;
+    TextView totalprice, emptycart;
     Double totalpricecart=0.0;
     String productprice, productprice2;
 
@@ -85,6 +88,7 @@ public class CartActivity extends AppCompatActivity {
 
         checkout = findViewById(R.id.checkout);
         totalprice = findViewById(R.id.totalprice);
+        emptycart = findViewById(R.id.emptycart);
 
         checkout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +103,9 @@ public class CartActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        CheckCartStatus();
+
         final DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart list");
         FirebaseRecyclerOptions<Cart> options = new FirebaseRecyclerOptions.Builder<Cart>().setQuery(cartListRef.child("Products"), Cart.class).build();
         FirebaseRecyclerAdapter<Cart, MyAdapter4> adapter = new FirebaseRecyclerAdapter<Cart, MyAdapter4>(options) {
@@ -214,6 +221,28 @@ public class CartActivity extends AppCompatActivity {
         adapter.startListening();
         recyclerView2.setAdapter(adapter2);
         adapter2.startListening();
+    }
+
+    private void CheckCartStatus(){
+        DatabaseReference cartstatusRef;
+        cartstatusRef = FirebaseDatabase.getInstance().getReference().child("Cart list");
+        cartstatusRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.exists()){
+                    recyclerView.setVisibility(View.VISIBLE);
+                    recyclerView2.setVisibility(View.VISIBLE);
+                    totalprice.setVisibility(View.VISIBLE);
+                    checkout.setVisibility(View.VISIBLE);
+                    emptycart.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
 

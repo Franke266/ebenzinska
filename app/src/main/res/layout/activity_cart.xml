@@ -20,15 +20,28 @@
             android:text="@string/cart_total"
             android:textSize="20dp"
             android:textAlignment="center"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white"
+            android:visibility="invisible"/>
 
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/emptycart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Vaša košarica je prazna!"
+        android:textSize="20dp"
+        android:textAlignment="center"
+        android:layout_marginTop="300dp"
+        android:visibility="visible"
+        android:textColor="@color/white"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/cartitems"
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:layout_below="@+id/top"
+        android:visibility="invisible"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -36,8 +49,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/cartitems"
-        android:layout_above="@+id/checkout"/>
-
+        android:layout_above="@+id/checkout"
+        android:visibility="invisible"/>
 
 
     <Button
@@ -47,7 +60,8 @@
         android:layout_above="@+id/bottomNavView_Bar"
         android:text="@string/cart_placeorder"
         android:backgroundTint="@color/green"
-        android:textColor="@android:color/white"/>
+        android:textColor="@android:color/white"
+        android:visibility="invisible"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:layout_width="match_parent"
