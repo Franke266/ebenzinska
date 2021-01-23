@@ -26,6 +26,7 @@
     <string name="addtocart">Dodaj </string>
     <string name="cart_total">Ukupno :</string>
     <string name="cart_placeorder">Potvrdi narudžbu</string>
+    <string name="empty_cart">Vaša košarica je prazna!</string>
     <string name="title_activity_menu">MenuActivity</string>
     <string name="tab_text_1">Gorivo</string>
     <string name="tab_text_2">Hrana i piće</string>
