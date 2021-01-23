@@ -1,40 +1,41 @@
 package com.example.kv_ivanfranjic;
 
 public class Food {
-    private String naziv, cijena, slika, id;
+    private String name, price, image, id, description;
 
     public Food() {
     }
 
-    public Food(String naziv, String cijena, String slika, String id) {
-        this.naziv = naziv;
-        this.cijena = cijena;
-        this.slika = slika;
+    public Food(String name, String price, String image, String id, String description) {
+        this.name = name;
+        this.price = price;
+        this.image = image;
         this.id = id;
+        this.description = description;
     }
 
-    public String getNaziv() {
-        return naziv;
+    public String getName() {
+        return name;
     }
 
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getCijena() {
-        return cijena;
+    public String getPrice() {
+        return price;
     }
 
-    public void setCijena(String cijena) {
-        this.cijena = cijena;
+    public void setPrice(String price) {
+        this.price = price;
     }
 
-    public String getSlika() {
-        return slika;
+    public String getImage() {
+        return image;
     }
 
-    public void setSlika(String slika) {
-        this.slika = slika;
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getId() {
@@ -44,5 +45,13 @@ public class Food {
 
     public void setId(String id){
         this.id = id;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -101,18 +101,18 @@ public class FoodDetailsActivity extends AppCompatActivity {
     }
 
     private void getFoodProductDetails(String foodproductid) {
-        DatabaseReference foodproductsRef = FirebaseDatabase.getInstance().getReference().child("Hrana");
+        DatabaseReference foodproductsRef = FirebaseDatabase.getInstance().getReference().child("Food");
         foodproductsRef.child(foodproductid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
                     Food food = snapshot.getValue(Food.class);
-                    food_details_name.setText(food.getNaziv());
-                    food_details_description.setText(food.getNaziv());
-                    food_details_price.setText(food.getCijena());
-                    foodimage=food.getSlika();
-                    Picasso.get().load(food.getSlika()).into(food_details_image);
+                    food_details_name.setText(food.getName());
+                    food_details_description.setText(food.getDescription());
+                    food_details_price.setText(food.getPrice());
+                    foodimage=food.getImage();
+                    Picasso.get().load(food.getImage()).into(food_details_image);
                 }
             }
 

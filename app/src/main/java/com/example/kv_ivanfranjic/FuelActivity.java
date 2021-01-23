@@ -66,7 +66,7 @@ public class FuelActivity extends AppCompatActivity{
         bottomNavigationView.setSelectedItemId(R.id.ic_fuel);
         fuelquantity= findViewById(R.id.fuelquantity);
         //totalfuelprice=findViewById(R.id.fueltotalprice);
-        FuelRef=FirebaseDatabase.getInstance().getReference().child("Spremnik");
+        FuelRef=FirebaseDatabase.getInstance().getReference().child("Fuel");
         recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -115,7 +115,7 @@ public class FuelActivity extends AppCompatActivity{
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot spinnerfueldata: dataSnapshot.getChildren())
                 {
-                    String fuelname = spinnerfueldata.child("naziv").getValue().toString();
+                    String fuelname = spinnerfueldata.child("name").getValue().toString();
                     spinnerDataList.add(fuelname);
 
                 }
@@ -126,24 +126,24 @@ public class FuelActivity extends AppCompatActivity{
                         switch(position){
                             case 0:
                                 fuelid = dataSnapshot.child("0").child("id").getValue().toString();
-                                fuelname = dataSnapshot.child("0").child("naziv").getValue().toString();
-                                fuelprice = dataSnapshot.child("0").child("cijena").getValue().toString();
+                                fuelname = dataSnapshot.child("0").child("name").getValue().toString();
+                                fuelprice = dataSnapshot.child("0").child("price").getValue().toString();
                                 fuelimage = dataSnapshot.child("0").child("image").getValue().toString();
-                                //currentvalue = dataSnapshot.child("0").child("stanje").getValue().toString();
+                                //currentvalue = dataSnapshot.child("0").child("quantity").getValue().toString();
                                 break;
                             case 1:
                                 fuelid = dataSnapshot.child("1").child("id").getValue().toString();
-                                fuelname = dataSnapshot.child("1").child("naziv").getValue().toString();
-                                fuelprice = dataSnapshot.child("1").child("cijena").getValue().toString();
+                                fuelname = dataSnapshot.child("1").child("name").getValue().toString();
+                                fuelprice = dataSnapshot.child("1").child("price").getValue().toString();
                                 fuelimage = dataSnapshot.child("1").child("image").getValue().toString();
-                                //currentvalue = dataSnapshot.child("1").child("stanje").getValue().toString();
+                                //currentvalue = dataSnapshot.child("1").child("quantity").getValue().toString();
                                 break;
                             case 2:
                                 fuelid = dataSnapshot.child("2").child("id").getValue().toString();
-                                fuelname = dataSnapshot.child("2").child("naziv").getValue().toString();
-                                fuelprice = dataSnapshot.child("2").child("cijena").getValue().toString();
+                                fuelname = dataSnapshot.child("2").child("name").getValue().toString();
+                                fuelprice = dataSnapshot.child("2").child("price").getValue().toString();
                                 fuelimage = dataSnapshot.child("2").child("image").getValue().toString();
-                                //currentvalue = dataSnapshot.child("2").child("stanje").getValue().toString();
+                                //currentvalue = dataSnapshot.child("2").child("quantity").getValue().toString();
                                 break;
                         }
 
@@ -216,8 +216,8 @@ public class FuelActivity extends AppCompatActivity{
         FirebaseRecyclerAdapter<Fuel, MyAdapter3> adapter = new FirebaseRecyclerAdapter<Fuel, MyAdapter3>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter3 holder, int position, @NonNull Fuel model) {
-                holder.fuelname.setText(model.getNaziv());
-                holder.fueltotalprice.setText(model.getCijena());
+                holder.fuelname.setText(model.getName());
+                holder.fueltotalprice.setText(model.getPrice());
             }
 
             @NonNull

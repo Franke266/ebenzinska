@@ -2,36 +2,36 @@ package com.example.kv_ivanfranjic;
 
 public class Fuel {
 
-    private String naziv, cijena, id, image;
+    private String name, price, id, image;
 
     public Fuel() {
     }
 
-    public Fuel(String naziv, String cijena, String id, String image) {
-        this.naziv = naziv;
-        this.cijena = cijena;
+    public Fuel(String name, String price, String id, String image) {
+        this.name = name;
+        this.price = price;
         this.id = id;
         this.image = image;
     }
 
-    public String getNaziv() {
+    public String getName() {
 
-        return naziv;
+        return name;
     }
 
-    public void setNaziv(String naziv) {
+    public void setName(String name) {
 
-        this.naziv = naziv;
+        this.name = name;
     }
 
-    public String getCijena() {
+    public String getPrice() {
 
-        return cijena;
+        return price;
     }
 
-    public void setCijena(String cijena) {
+    public void setPrice(String price) {
 
-        this.cijena = cijena;
+        this.price = price;
     }
 
     public String getId() {

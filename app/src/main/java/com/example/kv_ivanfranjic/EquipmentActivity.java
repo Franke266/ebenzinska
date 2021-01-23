@@ -50,7 +50,7 @@ public class EquipmentActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
         bottomNavigationView.setSelectedItemId(R.id.ic_equipment);
-        EquipRef=FirebaseDatabase.getInstance().getReference().child("Oprema");
+        EquipRef=FirebaseDatabase.getInstance().getReference().child("Equipment");
         recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -117,14 +117,14 @@ public class EquipmentActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();*/
     private void LoadData(String data){
-        Query query =EquipRef.orderByChild("naziv").startAt(data).endAt(data+"\uf8ff");
+        Query query =EquipRef.orderByChild("name").startAt(data).endAt(data+"\uf8ff");
         FirebaseRecyclerOptions<Equipment> options = new FirebaseRecyclerOptions.Builder<Equipment>().setQuery(query, Equipment.class).build();
         FirebaseRecyclerAdapter<Equipment, MyAdapter2> adapter = new FirebaseRecyclerAdapter<Equipment, MyAdapter2>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter2 holder, int position, @NonNull Equipment model) {
-                holder.equipproductname.setText(model.getNaziv());
-                holder.equipproductprice.setText(model.getCijena());
-                Picasso.get().load(model.getSlika()).into(holder.equipproductimg);
+                holder.equipproductname.setText(model.getName());
+                holder.equipproductprice.setText(model.getPrice());
+                Picasso.get().load(model.getImage()).into(holder.equipproductimg);
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

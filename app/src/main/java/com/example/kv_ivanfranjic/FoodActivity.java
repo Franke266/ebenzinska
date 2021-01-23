@@ -56,7 +56,7 @@ public class FoodActivity extends AppCompatActivity {
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
         bottomNavigationView.setSelectedItemId(R.id.ic_fastfood);
-        FoodRef=FirebaseDatabase.getInstance().getReference().child("Hrana");
+        FoodRef=FirebaseDatabase.getInstance().getReference().child("Food");
         searchView = (EditText) findViewById(R.id.search);
         recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
         recyclerView.setHasFixedSize(true);
@@ -123,14 +123,14 @@ public class FoodActivity extends AppCompatActivity {
     protected void onStart(){
         super.onStart();*/
     private void LoadData(String data){
-        Query query =FoodRef.orderByChild("naziv").startAt(data).endAt(data+"\uf8ff");
+        Query query =FoodRef.orderByChild("name").startAt(data).endAt(data+"\uf8ff");
         FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>().setQuery(query, Food.class).build();
         FirebaseRecyclerAdapter<Food, MyAdapter> adapter = new FirebaseRecyclerAdapter<Food, MyAdapter>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter holder, int position, @NonNull Food model) {
-                holder.foodproductname.setText(model.getNaziv());
-                holder.foodproductprice.setText(model.getCijena());
-                Picasso.get().load(model.getSlika()).into(holder.foodproductimg);
+                holder.foodproductname.setText(model.getName());
+                holder.foodproductprice.setText(model.getPrice());
+                Picasso.get().load(model.getImage()).into(holder.foodproductimg);
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override

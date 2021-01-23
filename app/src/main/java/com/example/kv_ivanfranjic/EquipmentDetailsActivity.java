@@ -101,18 +101,18 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
     }
 
     private void getEquipmentProductDetails(String equipproductid) {
-        DatabaseReference equipproductsRef = FirebaseDatabase.getInstance().getReference().child("Oprema");
+        DatabaseReference equipproductsRef = FirebaseDatabase.getInstance().getReference().child("Equipment");
         equipproductsRef.child(equipproductid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists())
                 {
                     Equipment equip = snapshot.getValue(Equipment.class);
-                    equip_details_name.setText(equip.getNaziv());
-                    equip_details_description.setText(equip.getNaziv());
-                    equip_details_price.setText(equip.getCijena());
-                    equipimage=equip.getSlika();
-                    Picasso.get().load(equip.getSlika()).into(equip_details_image);
+                    equip_details_name.setText(equip.getName());
+                    equip_details_description.setText(equip.getDescription());
+                    equip_details_price.setText(equip.getPrice());
+                    equipimage=equip.getImage();
+                    Picasso.get().load(equip.getImage()).into(equip_details_image);
                 }
             }
 
