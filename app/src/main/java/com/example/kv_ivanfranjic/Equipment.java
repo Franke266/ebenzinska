@@ -1,17 +1,18 @@
 package com.example.kv_ivanfranjic;
 
 public class Equipment {
-    private String name, price, image, id, description;
+    private String name, price, image, id, description, quantity;
 
     public Equipment() {
     }
 
-    public Equipment(String name, String price, String image, String id, String description) {
+    public Equipment(String name, String price, String image, String id, String description, String quantity) {
         this.name = name;
         this.price = price;
         this.image = image;
         this.id = id;
         this.description = description;
+        this.quantity = quantity;
     }
 
     public String getName() {
@@ -53,6 +54,14 @@ public class Equipment {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+        this.quantity = quantity;
     }
 
 }

@@ -2,16 +2,17 @@ package com.example.kv_ivanfranjic;
 
 public class Fuel {
 
-    private String name, price, id, image;
+    private String name, price, id, image, quantity;
 
     public Fuel() {
     }
 
-    public Fuel(String name, String price, String id, String image) {
+    public Fuel(String name, String price, String id, String image, String quantity) {
         this.name = name;
         this.price = price;
         this.id = id;
         this.image = image;
+        this.quantity = quantity;
     }
 
     public String getName() {
@@ -52,6 +53,16 @@ public class Fuel {
     public void setImage(String image) {
 
         this.image = image;
+    }
+
+    public String getQuantity() {
+
+        return quantity;
+    }
+
+    public void setQuantity(String quantity) {
+
+        this.quantity = quantity;
     }
 
 

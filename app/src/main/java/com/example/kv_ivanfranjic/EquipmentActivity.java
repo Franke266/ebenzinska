@@ -126,6 +126,18 @@ public class EquipmentActivity extends AppCompatActivity {
                 holder.equipproductprice.setText(model.getPrice());
                 Picasso.get().load(model.getImage()).into(holder.equipproductimg);
 
+                if(model.getQuantity().equals("0"))
+                {
+                    holder.itemView.setVisibility(View.GONE);
+                    ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                    params.height = 0;
+                    params.width = 0;
+                    holder.itemView.setLayoutParams(params);
+                }else {
+
+                    holder.itemView.setVisibility(View.VISIBLE);
+                }
+
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

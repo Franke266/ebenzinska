@@ -128,9 +128,22 @@ public class FoodActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<Food, MyAdapter> adapter = new FirebaseRecyclerAdapter<Food, MyAdapter>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter holder, int position, @NonNull Food model) {
-                holder.foodproductname.setText(model.getName());
-                holder.foodproductprice.setText(model.getPrice());
-                Picasso.get().load(model.getImage()).into(holder.foodproductimg);
+
+                    holder.foodproductname.setText(model.getName());
+                    holder.foodproductprice.setText(model.getPrice());
+                    Picasso.get().load(model.getImage()).into(holder.foodproductimg);
+
+                if(model.getQuantity().equals("0"))
+                {
+                    holder.itemView.setVisibility(View.GONE);
+                    ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                    params.height = 0;
+                    params.width = 0;
+                    holder.itemView.setLayoutParams(params);
+                }else {
+
+                    holder.itemView.setVisibility(View.VISIBLE);
+                }
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
