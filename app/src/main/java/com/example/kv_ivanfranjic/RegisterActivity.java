@@ -44,7 +44,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         register = findViewById(R.id.register);
 
         awesomeValidation.addValidation(this, R.id.email, Patterns.EMAIL_ADDRESS, R.string.email_missing);
-        awesomeValidation.addValidation(this, R.id.password, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.password_missing);
+        awesomeValidation.addValidation(this, R.id.password, "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$", R.string.password_missing);
 
         register.setOnClickListener(this);
     }

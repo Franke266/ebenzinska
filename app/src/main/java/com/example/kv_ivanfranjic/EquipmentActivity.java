@@ -1,10 +1,12 @@
 package com.example.kv_ivanfranjic;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -26,7 +28,10 @@ import androidx.appcompat.widget.Toolbar;
 import com.cepheuen.elegantnumberbutton.view.ElegantNumberButton;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,11 +45,11 @@ import java.util.ArrayList;
 public class EquipmentActivity extends AppCompatActivity {
 
     DatabaseReference EquipRef;
-    RecyclerView recyclerView;
-    LinearLayoutManager layoutManager;
+    RecyclerView recyclerView, recyclerView2, recyclerView3, recyclerView4;
+    LinearLayoutManager layoutManager, layoutManager2, layoutManager3, layoutManager4;
     ArrayAdapter<String> adapter2;
     Spinner pricefilterspinner;
-    ArrayList<String> spinnerDataList;
+    ArrayList<String> spinnerDataList2;
     //EditText searchView;
 
     @Override
@@ -58,9 +63,21 @@ public class EquipmentActivity extends AppCompatActivity {
         bottomNavigationView.setSelectedItemId(R.id.ic_equipment);
         EquipRef=FirebaseDatabase.getInstance().getReference().child("Equipment");
         recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
+        recyclerView2 = (RecyclerView) findViewById(R.id.myRecycler2);
+        recyclerView3 = (RecyclerView) findViewById(R.id.myRecycler3);
+        recyclerView4 = (RecyclerView) findViewById(R.id.myRecycler4);
         recyclerView.setHasFixedSize(true);
+        recyclerView2.setHasFixedSize(true);
+        recyclerView3.setHasFixedSize(true);
+        recyclerView4.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
+        layoutManager2 = new LinearLayoutManager(this);
+        layoutManager3 = new LinearLayoutManager(this);
+        layoutManager4 = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView2.setLayoutManager(layoutManager2);
+        recyclerView3.setLayoutManager(layoutManager3);
+        recyclerView4.setLayoutManager(layoutManager4);
         pricefilterspinner = (Spinner) findViewById(R.id.spPriceFilter);
         //searchView= (EditText) findViewById(R.id.search);
 
@@ -118,11 +135,12 @@ public class EquipmentActivity extends AppCompatActivity {
             }
         });
 
-        spinnerDataList = new ArrayList<>();
-        adapter2 = new ArrayAdapter<String>(EquipmentActivity.this, android.R.layout.simple_spinner_dropdown_item,spinnerDataList);
-        spinnerDataList.add("---");
-        spinnerDataList.add("Cijena rastuća");
-        spinnerDataList.add("Cijena padajuća");
+        spinnerDataList2 = new ArrayList<>();
+        adapter2 = new ArrayAdapter<String>(EquipmentActivity.this, android.R.layout.simple_spinner_dropdown_item,spinnerDataList2);
+        spinnerDataList2.add("Poredano od A-Z");
+        spinnerDataList2.add("Poredano od Z-A");
+        spinnerDataList2.add("Cijena rastuća");
+        spinnerDataList2.add("Cijena padajuća");
 
         pricefilterspinner.setAdapter(adapter2);
         pricefilterspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -130,13 +148,32 @@ public class EquipmentActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch(position){
                     case 0:
-                            LoadData("");
+                        LoadData("");
+                        recyclerView.setVisibility(View.VISIBLE);
+                        recyclerView2.setVisibility(View.INVISIBLE);
+                        recyclerView3.setVisibility(View.INVISIBLE);
+                        recyclerView4.setVisibility(View.INVISIBLE);
                         break;
                     case 1:
-                            LoadDataPriceAscending();
+                        LoadData2("");
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        recyclerView2.setVisibility(View.VISIBLE);
+                        recyclerView3.setVisibility(View.INVISIBLE);
+                        recyclerView4.setVisibility(View.INVISIBLE);
                         break;
                     case 2:
-                            LoadDataPriceDescending();
+                        LoadDataPriceAscending();
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        recyclerView2.setVisibility(View.INVISIBLE);
+                        recyclerView3.setVisibility(View.VISIBLE);
+                        recyclerView4.setVisibility(View.INVISIBLE);
+                        break;
+                    case 3:
+                        LoadDataPriceDescending();
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        recyclerView2.setVisibility(View.INVISIBLE);
+                        recyclerView3.setVisibility(View.INVISIBLE);
+                        recyclerView4.setVisibility(View.VISIBLE);
                         break;
                 }
 
@@ -200,10 +237,12 @@ public class EquipmentActivity extends AppCompatActivity {
 
     }
 
-    private void LoadDataPriceAscending(){
-        Query query =EquipRef.orderByChild("price");
+    private void LoadData2(String data){
+        layoutManager2.setReverseLayout(true);
+        layoutManager2.setStackFromEnd(true);
+        Query query =EquipRef.orderByChild("name").startAt(data).endAt(data+"\uf8ff");
         FirebaseRecyclerOptions<Equipment> options = new FirebaseRecyclerOptions.Builder<Equipment>().setQuery(query, Equipment.class).build();
-        FirebaseRecyclerAdapter<Equipment, MyAdapter2> adapter = new FirebaseRecyclerAdapter<Equipment, MyAdapter2>(options) {
+        FirebaseRecyclerAdapter<Equipment, MyAdapter2> adapter2 = new FirebaseRecyclerAdapter<Equipment, MyAdapter2>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter2 holder, int position, @NonNull Equipment model) {
                 holder.equipproductname.setText(model.getName());
@@ -240,17 +279,62 @@ public class EquipmentActivity extends AppCompatActivity {
                 return holder;
             }
         };
-        recyclerView.setAdapter(adapter);
-        adapter.startListening();
+        recyclerView2.setAdapter(adapter2);
+        adapter2.startListening();
+
+    }
+
+    private void LoadDataPriceAscending(){
+        Query query =EquipRef.orderByChild("price");
+        FirebaseRecyclerOptions<Equipment> options = new FirebaseRecyclerOptions.Builder<Equipment>().setQuery(query, Equipment.class).build();
+        FirebaseRecyclerAdapter<Equipment, MyAdapter2> adapter3 = new FirebaseRecyclerAdapter<Equipment, MyAdapter2>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull MyAdapter2 holder, int position, @NonNull Equipment model) {
+                holder.equipproductname.setText(model.getName());
+                holder.equipproductprice.setText(model.getPrice().toString());
+                Picasso.get().load(model.getImage()).into(holder.equipproductimg);
+
+                if(model.getQuantity().equals("0"))
+                {
+                    holder.itemView.setVisibility(View.GONE);
+                    ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                    params.height = 0;
+                    params.width = 0;
+                    holder.itemView.setLayoutParams(params);
+                }else {
+
+                    holder.itemView.setVisibility(View.VISIBLE);
+                }
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(EquipmentActivity.this, EquipmentDetailsActivity.class);
+                        intent.putExtra("id", model.getId());
+                        startActivity(intent);
+                    }
+                });
+            }
+
+            @NonNull
+            @Override
+            public MyAdapter2 onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview2, parent, false);
+                MyAdapter2 holder=new MyAdapter2(view);
+                return holder;
+            }
+        };
+        recyclerView3.setAdapter(adapter3);
+        adapter3.startListening();
 
     }
 
     private void LoadDataPriceDescending(){
-        layoutManager.setReverseLayout(true);
-        layoutManager.setStackFromEnd(true);
+        layoutManager4.setReverseLayout(true);
+        layoutManager4.setStackFromEnd(true);
         Query query =EquipRef.orderByChild("price");
         FirebaseRecyclerOptions<Equipment> options = new FirebaseRecyclerOptions.Builder<Equipment>().setQuery(query, Equipment.class).build();
-        FirebaseRecyclerAdapter<Equipment, MyAdapter2> adapter = new FirebaseRecyclerAdapter<Equipment, MyAdapter2>(options) {
+        FirebaseRecyclerAdapter<Equipment, MyAdapter2> adapter4 = new FirebaseRecyclerAdapter<Equipment, MyAdapter2>(options) {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter2 holder, int position, @NonNull Equipment model) {
                 holder.equipproductname.setText(model.getName());
@@ -287,8 +371,8 @@ public class EquipmentActivity extends AppCompatActivity {
                 return holder;
             }
         };
-        recyclerView.setAdapter(adapter);
-        adapter.startListening();
+        recyclerView4.setAdapter(adapter4);
+        adapter4.startListening();
 
     }
 
@@ -301,14 +385,18 @@ public class EquipmentActivity extends AppCompatActivity {
             @Override
             public boolean onQueryTextSubmit(String data) {
                 LoadData(data);
-                //LoadDataPrice(data);
+                LoadData2(data);
+                //LoadDataPriceAscending(data);
+                //LoadDataPriceDescending(data);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String data) {
                 LoadData(data);
-                //LoadDataPrice(data);
+                LoadData2(data);
+                //LoadDataPriceAscending(data);
+                //LoadDataPriceDescending(data);
                 return false;
             }
         });
@@ -320,10 +408,29 @@ public class EquipmentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
 
-        if(id==R.id.filter)
+        if(id==R.id.logout)
         {
-            Intent intent = new Intent(EquipmentActivity.this, CartActivity.class);
-            startActivity(intent);
+            CharSequence options[] = new CharSequence[]{
+                    "Da",
+                    "Ne"
+            };
+            AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentActivity.this);
+            builder.setTitle("Jeste li sigurni da se želite odjaviti?");
+            builder.setItems(options, new DialogInterface.OnClickListener(){
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i){
+                    if(i == 0){
+                        FirebaseAuth.getInstance().signOut();
+                        Intent intent= new Intent(EquipmentActivity.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                    if( i == 1){
+                        Intent intent= new Intent(EquipmentActivity.this, EquipmentActivity.class);
+                        startActivity(intent);
+                    }
+                }
+            });
+            builder.show();
         }
         return true;
     }
