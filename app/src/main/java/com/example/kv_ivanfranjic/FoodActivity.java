@@ -17,9 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
@@ -43,8 +46,11 @@ public class FoodActivity extends AppCompatActivity {
 
     DatabaseReference FoodRef;
     RecyclerView recyclerView;
-    RecyclerView.LayoutManager layoutManager;
-    EditText searchView;
+    LinearLayoutManager layoutManager;
+    ArrayAdapter<String> adapter2;
+    Spinner pricefilterspinner;
+    ArrayList<String> spinnerDataList;
+    //EditText searchView;
 
 
     @Override
@@ -57,13 +63,14 @@ public class FoodActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
         bottomNavigationView.setSelectedItemId(R.id.ic_fastfood);
         FoodRef=FirebaseDatabase.getInstance().getReference().child("Food");
-        searchView = (EditText) findViewById(R.id.search);
+        //searchView = (EditText) findViewById(R.id.search);
         recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        pricefilterspinner = (Spinner) findViewById(R.id.spPriceFilter);
 
-        LoadData("");
+        //LoadData("");
         /*searchView.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -117,6 +124,39 @@ public class FoodActivity extends AppCompatActivity {
             }
         });
 
+
+        spinnerDataList = new ArrayList<>();
+        adapter2 = new ArrayAdapter<String>(FoodActivity.this, android.R.layout.simple_spinner_dropdown_item,spinnerDataList);
+        spinnerDataList.add("---");
+        spinnerDataList.add("Cijena rastuća");
+        spinnerDataList.add("Cijena padajuća");
+
+        pricefilterspinner.setAdapter(adapter2);
+        pricefilterspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch(position){
+                    case 0:
+                        LoadData("");
+                        break;
+                    case 1:
+                        LoadDataPriceAscending();
+                        break;
+                    case 2:
+                        LoadDataPriceDescending();
+                        break;
+                }
+
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
     /*@Override
@@ -130,8 +170,105 @@ public class FoodActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull MyAdapter holder, int position, @NonNull Food model) {
 
                     holder.foodproductname.setText(model.getName());
-                    holder.foodproductprice.setText(model.getPrice());
+                    holder.foodproductprice.setText(model.getPrice().toString());
                     Picasso.get().load(model.getImage()).into(holder.foodproductimg);
+
+                if(model.getQuantity().equals("0"))
+                {
+                    holder.itemView.setVisibility(View.GONE);
+                    ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                    params.height = 0;
+                    params.width = 0;
+                    holder.itemView.setLayoutParams(params);
+                }else {
+
+                    holder.itemView.setVisibility(View.VISIBLE);
+                }
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(FoodActivity.this, FoodDetailsActivity.class);
+                        intent.putExtra("id", model.getId());
+                        startActivity(intent);
+                    }
+                });
+            }
+
+
+            @NonNull
+            @Override
+            public MyAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview, parent, false);
+                MyAdapter holder=new MyAdapter(view);
+                return holder;
+            }
+        };
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
+
+    }
+
+    private void LoadDataPriceAscending(){
+        Query query =FoodRef.orderByChild("price");
+        FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>().setQuery(query, Food.class).build();
+        FirebaseRecyclerAdapter<Food, MyAdapter> adapter = new FirebaseRecyclerAdapter<Food, MyAdapter>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull MyAdapter holder, int position, @NonNull Food model) {
+
+                holder.foodproductname.setText(model.getName());
+                holder.foodproductprice.setText(model.getPrice().toString());
+                Picasso.get().load(model.getImage()).into(holder.foodproductimg);
+
+                if(model.getQuantity().equals("0"))
+                {
+                    holder.itemView.setVisibility(View.GONE);
+                    ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                    params.height = 0;
+                    params.width = 0;
+                    holder.itemView.setLayoutParams(params);
+                }else {
+
+                    holder.itemView.setVisibility(View.VISIBLE);
+                }
+
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(FoodActivity.this, FoodDetailsActivity.class);
+                        intent.putExtra("id", model.getId());
+                        startActivity(intent);
+                    }
+                });
+            }
+
+
+            @NonNull
+            @Override
+            public MyAdapter onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.cardview, parent, false);
+                MyAdapter holder=new MyAdapter(view);
+                return holder;
+            }
+        };
+        recyclerView.setAdapter(adapter);
+        adapter.startListening();
+
+
+    }
+
+    private void LoadDataPriceDescending(){
+        layoutManager.setReverseLayout(true);
+        layoutManager.setStackFromEnd(true);
+        Query query =FoodRef.orderByChild("price");
+        FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>().setQuery(query, Food.class).build();
+        FirebaseRecyclerAdapter<Food, MyAdapter> adapter = new FirebaseRecyclerAdapter<Food, MyAdapter>(options) {
+            @Override
+            protected void onBindViewHolder(@NonNull MyAdapter holder, int position, @NonNull Food model) {
+
+                holder.foodproductname.setText(model.getName());
+                holder.foodproductprice.setText(model.getPrice().toString());
+                Picasso.get().load(model.getImage()).into(holder.foodproductimg);
 
                 if(model.getQuantity().equals("0"))
                 {

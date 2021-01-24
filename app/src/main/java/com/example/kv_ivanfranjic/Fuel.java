@@ -2,12 +2,13 @@ package com.example.kv_ivanfranjic;
 
 public class Fuel {
 
-    private String name, price, id, image, quantity;
+    private String name, id, image, quantity;
+    private Double price;
 
     public Fuel() {
     }
 
-    public Fuel(String name, String price, String id, String image, String quantity) {
+    public Fuel(String name, Double price, String id, String image, String quantity) {
         this.name = name;
         this.price = price;
         this.id = id;
@@ -25,12 +26,12 @@ public class Fuel {
         this.name = name;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
 
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
 
         this.price = price;
     }

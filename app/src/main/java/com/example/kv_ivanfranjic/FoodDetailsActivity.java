@@ -33,10 +33,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
     TextView food_details_name, food_details_description, food_details_price;
     ElegantNumberButton foodquantity;
     String foodproductid = "";
-    Float totalfoodproductprice;
+    Double totalfoodproductprice = 0.0;
     Integer totalfoodproductquantity = 0;
-    Float foodproductprice;
-    String foodimage="";
+    Double foodproductprice = 0.0;
+    String foodimage = "";
+    Integer availablequantity = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +73,24 @@ public class FoodDetailsActivity extends AppCompatActivity {
 
         DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart list");
         totalfoodproductquantity = Integer.parseInt(foodquantity.getNumber());
-        foodproductprice = Float.parseFloat(food_details_price.getText().toString());
+        foodproductprice = Double.parseDouble(food_details_price.getText().toString());
         totalfoodproductprice = totalfoodproductquantity*foodproductprice;
 
         final HashMap<String, Object> cartMap = new HashMap<>();
-        cartMap.put("id", foodproductid);
-        cartMap.put("name", food_details_name.getText().toString());
-        cartMap.put("price", totalfoodproductprice.toString());
-        cartMap.put("date", saveCurrentDate);
-        /*cartMap.put("time", saveCurrentTime);*/
-        cartMap.put("quantity", foodquantity.getNumber());
-        cartMap.put("image", foodimage);
+        if(Integer.parseInt(foodquantity.getNumber())<availablequantity)
+        {
+            cartMap.put("id", foodproductid);
+            cartMap.put("name", food_details_name.getText().toString());
+            cartMap.put("price", totalfoodproductprice);
+            cartMap.put("date", saveCurrentDate);
+            /*cartMap.put("time", saveCurrentTime);*/
+            cartMap.put("quantity", foodquantity.getNumber());
+            cartMap.put("image", foodimage);
+        }
+        else{
+            Toast.makeText(FoodDetailsActivity.this, "Dostupno samo "+availablequantity, Toast.LENGTH_SHORT).show();
+        }
+
 
         cartListRef.child("Products").child(foodproductid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -110,8 +118,9 @@ public class FoodDetailsActivity extends AppCompatActivity {
                     Food food = snapshot.getValue(Food.class);
                     food_details_name.setText(food.getName());
                     food_details_description.setText(food.getDescription());
-                    food_details_price.setText(food.getPrice());
+                    food_details_price.setText(food.getPrice().toString());
                     foodimage=food.getImage();
+                    availablequantity=Integer.parseInt(food.getQuantity());
                     Picasso.get().load(food.getImage()).into(food_details_image);
                 }
             }

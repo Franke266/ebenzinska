@@ -32,10 +32,11 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
     TextView equip_details_name, equip_details_description, equip_details_price;
     ElegantNumberButton equipquantity;
     String equipproductid = "";
-    Float totalequipmentproductprice;
+    Double totalequipmentproductprice = 0.0;
     Integer totalequipmentproductquantity = 0;
-    Float equipmentproductprice;
-    String equipimage="";
+    Double equipmentproductprice = 0.0;
+    String equipimage = "";
+    Integer availablequantity=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,17 +73,26 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
 
         DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart list");
         totalequipmentproductquantity = Integer.parseInt(equipquantity.getNumber());
-        equipmentproductprice = Float.parseFloat(equip_details_price.getText().toString());
+        equipmentproductprice = Double.parseDouble(equip_details_price.getText().toString());
         totalequipmentproductprice = totalequipmentproductquantity*equipmentproductprice;
 
         final HashMap<String, Object> cartMap = new HashMap<>();
-        cartMap.put("id", equipproductid);
-        cartMap.put("name", equip_details_name.getText().toString());
-        cartMap.put("price", totalequipmentproductprice.toString());
-        cartMap.put("date", saveCurrentDate);
-        /*cartMap.put("time", saveCurrentTime);*/
-        cartMap.put("quantity", equipquantity.getNumber());
-        cartMap.put("image", equipimage);
+        if(Integer.parseInt(equipquantity.getNumber())<availablequantity)
+        {
+            cartMap.put("id", equipproductid);
+            cartMap.put("name", equip_details_name.getText().toString());
+            cartMap.put("price", totalequipmentproductprice);
+            cartMap.put("date", saveCurrentDate);
+            /*cartMap.put("time", saveCurrentTime);*/
+            cartMap.put("quantity", equipquantity.getNumber());
+            cartMap.put("image", equipimage);
+        }
+        else
+        {
+            Toast.makeText(EquipmentDetailsActivity.this, "Dostupno samo "+availablequantity, Toast.LENGTH_SHORT).show();
+
+        }
+
 
         cartListRef.child("Products").child(equipproductid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -110,8 +120,9 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
                     Equipment equip = snapshot.getValue(Equipment.class);
                     equip_details_name.setText(equip.getName());
                     equip_details_description.setText(equip.getDescription());
-                    equip_details_price.setText(equip.getPrice());
+                    equip_details_price.setText(equip.getPrice().toString());
                     equipimage=equip.getImage();
+                    availablequantity=Integer.parseInt(equip.getQuantity());
                     Picasso.get().load(equip.getImage()).into(equip_details_image);
                 }
             }

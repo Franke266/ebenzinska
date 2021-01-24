@@ -188,7 +188,7 @@ public class FuelActivity extends AppCompatActivity{
         final HashMap<String, Object> cartMap = new HashMap<>();
         cartMap.put("id", fuelid);
         cartMap.put("name", fuelname);
-        cartMap.put("price", totalprice.toString());
+        cartMap.put("price", totalprice);
         cartMap.put("date", saveCurrentDate);
         /*cartMap.put("time", saveCurrentTime);*/
         cartMap.put("quantity", fuelquantity.getText().toString());
@@ -217,7 +217,7 @@ public class FuelActivity extends AppCompatActivity{
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter3 holder, int position, @NonNull Fuel model) {
                 holder.fuelname.setText(model.getName());
-                holder.fueltotalprice.setText(model.getPrice());
+                holder.fueltotalprice.setText(model.getPrice().toString());
             }
 
             @NonNull

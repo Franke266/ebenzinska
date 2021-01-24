@@ -29,12 +29,18 @@
         android:drawableRight="@drawable/ic_search"
         android:paddingRight="10dp"/>-->
 
+    <androidx.appcompat.widget.AppCompatSpinner
+        android:id="@+id/spPriceFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"/>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/myRecycler"
-        android:layout_below="@id/toolbar"
+        android:layout_below="@id/spPriceFilter"
         android:layout_above="@id/bottomNavView_Bar" />
 
             <com.google.android.material.bottomnavigation.BottomNavigationView

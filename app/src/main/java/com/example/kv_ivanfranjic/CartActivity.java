@@ -112,11 +112,11 @@ public class CartActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter4 holder, int position, @NonNull Cart model) {
                 holder.cartproductname.setText(model.getName());
-                holder.cartproductprice.setText("Cijena: "+(String.format("%.02f", Double.parseDouble(model.getPrice())))+" kn");
+                holder.cartproductprice.setText("Cijena: "+(String.format("%.02f", Double.parseDouble(model.getPrice().toString())))+" kn");
                 holder.cartproductquantity.setText("Kol "+model.getQuantity());
                 Picasso.get().load(model.getImage()).into(holder.cartproductimage);
 
-                productprice = model.getPrice();
+                productprice = model.getPrice().toString();
                 totalpricecart = totalpricecart + Double.parseDouble(productprice);
                 totalprice.setText("Ukupno: "+(String.format("%.02f", totalpricecart))+" kn");
 
@@ -124,20 +124,23 @@ public class CartActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         CharSequence options[] = new CharSequence[]{
-                                "Uredi",
-                                "Obriši"
+                                //"Uredi",
+                                "Da",
+                                "Ne"
                         };
                         AlertDialog.Builder builder = new AlertDialog.Builder(CartActivity.this);
-                        builder.setTitle("Uredi artikl:");
+                        builder.setTitle("Jeste li sigurni da želite ukloniti ovaj artikl?");
                         builder.setItems(options, new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i){
-                                if(i == 0){
-                                    Intent intent= new Intent(CartActivity.this, EquipmentDetailsActivity.class);
+                                if(i == 1){
+                                   /* Intent intent= new Intent(CartActivity.this, EquipmentDetailsActivity.class);
                                     intent.putExtra("id", model.getId());
+                                    startActivity(intent);*/
+                                    Intent intent= new Intent(CartActivity.this, CartActivity.class);
                                     startActivity(intent);
                                 }
-                                if( i == 1){
+                                if( i == 0){
                                     cartListRef.child("Products").child(model.getId()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
@@ -170,11 +173,11 @@ public class CartActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter4 holder2, int position2, @NonNull Cart model2) {
                 holder2.cartproductname.setText(model2.getName());
-                holder2.cartproductprice.setText("Cijena: "+(String.format("%.02f", Double.parseDouble(model2.getPrice())))+" kn");
+                holder2.cartproductprice.setText("Cijena: "+(String.format("%.02f", Double.parseDouble(model2.getPrice().toString())))+" kn");
                 holder2.cartproductquantity.setText("Kol "+model2.getQuantity()+" l");
                 Picasso.get().load(model2.getImage()).into(holder2.cartproductimage);
 
-                productprice2 = model2.getPrice();
+                productprice2 = model2.getPrice().toString();
                 totalpricecart = totalpricecart + Double.parseDouble(productprice2);
                 totalprice.setText("Ukupno: "+(String.format("%.02f", totalpricecart))+" kn");
 
@@ -182,10 +185,11 @@ public class CartActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view2) {
                         CharSequence options2[] = new CharSequence[]{
-                                "Obriši"
+                                "Da",
+                                "Ne"
                         };
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(CartActivity.this);
-                        builder2.setTitle("Jeste li sigurni da želite obrisati?");
+                        builder2.setTitle("Jeste li sigurni da želite ukloniti ovaj artikl?");
                         builder2.setItems(options2, new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialogInterface2, int i){
@@ -200,6 +204,10 @@ public class CartActivity extends AppCompatActivity {
                                             }
                                         }
                                     });
+                                }
+                                if(i == 1){
+                                    Intent intent= new Intent(CartActivity.this, CartActivity.class);
+                                    startActivity(intent);
                                 }
                             }
                         });

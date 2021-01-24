@@ -1,12 +1,13 @@
 package com.example.kv_ivanfranjic;
 
 public class Cart {
-    private String id, name, price, quantity, image;
+    private String id, name, quantity, image;
+    private Double price;
 
     public Cart() {
     }
 
-    public Cart(String id, String name, String price, String quantity, String image) {
+    public Cart(String id, String name, Double price, String quantity, String image) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -30,11 +31,11 @@ public class Cart {
         this.name = name;
     }
 
-    public String getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(String price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
