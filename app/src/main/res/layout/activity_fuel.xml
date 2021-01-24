@@ -16,11 +16,11 @@
         app:titleMarginStart="20dp"/>
 
     <ImageView
-        android:src="@drawable/ic_fuel"
+        android:src="@drawable/ic_fuel_main"
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginTop="90dp"
-        android:layout_marginLeft="10dp"/>
+        android:layout_marginLeft="10dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="200dp"
