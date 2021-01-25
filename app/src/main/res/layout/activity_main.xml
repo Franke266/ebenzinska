@@ -21,7 +21,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:textColor="@color/white"/>
 
     <Button
         android:id="@+id/registracijabutton"
@@ -30,7 +31,8 @@
         android:text="@string/registration_main"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/prijavabutton"
-        app:layout_constraintTop_toBottomOf="@+id/prijavabutton"/>
+        app:layout_constraintTop_toBottomOf="@+id/prijavabutton"
+        android:textColor="@color/white"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

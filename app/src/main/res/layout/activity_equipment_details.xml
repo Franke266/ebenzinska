@@ -51,7 +51,9 @@
         app:initialNumber="1"
         app:finalNumber="10"
         android:layout_below="@+id/equip_details_price"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="10dp"
+        app:backGroundColor="@color/grey"
+        app:textColor="@color/black"/>
 
     <Button
         android:id="@+id/addtocartequip"
@@ -62,6 +64,7 @@
         android:layout_below="@+id/equipquantity"
         android:layout_marginTop="150dp"
         android:text="@string/addtocart"
+        android:textColor="@color/white"
         />
 
 

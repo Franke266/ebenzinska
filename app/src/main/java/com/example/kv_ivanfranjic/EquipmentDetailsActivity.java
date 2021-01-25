@@ -54,6 +54,7 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
 
         getEquipmentProductDetails(equipproductid);
 
+
         addtocartequip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,8 +78,8 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
         totalequipmentproductprice = totalequipmentproductquantity*equipmentproductprice;
 
         final HashMap<String, Object> cartMap = new HashMap<>();
-        if(Integer.parseInt(equipquantity.getNumber())<availablequantity)
-        {
+        //if(Integer.parseInt(equipquantity.getNumber())<availablequantity)
+        //{
             cartMap.put("id", equipproductid);
             cartMap.put("name", equip_details_name.getText().toString());
             cartMap.put("price", totalequipmentproductprice);
@@ -86,12 +87,12 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
             /*cartMap.put("time", saveCurrentTime);*/
             cartMap.put("quantity", equipquantity.getNumber());
             cartMap.put("image", equipimage);
-        }
+        /*}
         else
         {
             Toast.makeText(EquipmentDetailsActivity.this, "Dostupno samo "+availablequantity, Toast.LENGTH_SHORT).show();
 
-        }
+        }*/
 
 
         cartListRef.child("Products").child(equipproductid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -124,6 +125,7 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
                     equipimage=equip.getImage();
                     availablequantity=Integer.parseInt(equip.getQuantity());
                     Picasso.get().load(equip.getImage()).into(equip_details_image);
+                    equipquantity.setRange(1, availablequantity);
                 }
             }
 

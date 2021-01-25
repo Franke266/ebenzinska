@@ -19,12 +19,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.common.collect.Range;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ConfirmOrder extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,6 +43,7 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
     Button pay, back;
     String totalpriceconfirm = "";
     private AwesomeValidation awesomeValidation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +86,8 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
         pay.setOnClickListener(this);
     }
 
+
+
     private void submitForm() {
         if (awesomeValidation.validate()) {
 
@@ -104,8 +113,7 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
             ordersRef.child("Orders").updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
-                    if(task.isSuccessful())
-                    {
+                    if(task.isSuccessful()) {
                         FirebaseDatabase.getInstance().getReference().child("Cart list").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -116,7 +124,6 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
                                 finish();
                             }
                         });
-
                     }
                 }
             });

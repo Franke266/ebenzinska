@@ -127,6 +127,7 @@ public class CartActivity extends AppCompatActivity {
                                 //"Uredi",
                                 "Da",
                                 "Ne"
+
                         };
                         AlertDialog.Builder builder = new AlertDialog.Builder(CartActivity.this);
                         builder.setTitle("Jeste li sigurni da želite ukloniti ovaj artikl?");
