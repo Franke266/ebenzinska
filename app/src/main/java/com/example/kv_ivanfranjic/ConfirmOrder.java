@@ -70,7 +70,7 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
 
         totalpriceconfirm = getIntent().getStringExtra("Total price");
         Double totalpriceconfirm2=Double.parseDouble(totalpriceconfirm);
-        showtotalpriceconfirm.setText("Ukupno "+(String.format("%.02f", totalpriceconfirm2))+" kn");
+        showtotalpriceconfirm.setText(getString(R.string.total)+" "+(String.format("%.02f", totalpriceconfirm2))+" "+getString(R.string.pricetag));
 
         awesomeValidation.addValidation(this, R.id.confirmname, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.name_missing);
         awesomeValidation.addValidation(this, R.id.confirmcreditcard, "^(?=\\s*\\S).*$", R.string.cd_number_missing);
@@ -91,13 +91,11 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
     private void submitForm() {
         if (awesomeValidation.validate()) {
 
-            String saveCurrentTime, saveCurrentDate;
+            String saveCurrentDate;
             Calendar calForDate = Calendar.getInstance();
             SimpleDateFormat currentDate = new SimpleDateFormat("dd, MMM, yyyy");
             saveCurrentDate = currentDate.format(calForDate.getTime());
 
-            /*SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-            saveCurrentTime = currentDate.format(calForDate.getTime());*/
 
             DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference().child("Orders");
             final HashMap<String, Object> cartMap = new HashMap<>();
@@ -105,7 +103,6 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
             cartMap.put("name", firstlastname.getText().toString());
             cartMap.put("cardnumber", creditcardnumber.getText().toString());
             cartMap.put("date", saveCurrentDate);
-            /*cartMap.put("time", saveCurrentTime);*/
             cartMap.put("monthexp", creditcardmonth.getText().toString());
             cartMap.put("yearexp", creditcardyear.getText().toString());
             cartMap.put("cvv", creditcardcvv.getText().toString());
@@ -117,7 +114,7 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
                         FirebaseDatabase.getInstance().getReference().child("Cart list").removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(ConfirmOrder.this, "Narudžba uspješno izvršena!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ConfirmOrder.this, getString(R.string.order_confirmed), Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(ConfirmOrder.this, FuelActivity.class);
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);

@@ -24,8 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    EditText uneseniemail;
-    EditText unesenipassword;
+    EditText enteredemail;
+    EditText enteredpassword;
     Button login;
     private FirebaseAuth mAuth;
     private AwesomeValidation awesomeValidation;
@@ -36,8 +36,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         mAuth = FirebaseAuth.getInstance();
-        uneseniemail = findViewById(R.id.email);
-        unesenipassword = findViewById(R.id.password);
+        enteredemail = findViewById(R.id.email);
+        enteredpassword = findViewById(R.id.password);
         login = findViewById(R.id.login);
 
         awesomeValidation.addValidation(this, R.id.email, Patterns.EMAIL_ADDRESS, R.string.email_missing);
@@ -48,8 +48,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void loginForm() {
         String email, password;
-        email = uneseniemail.getText().toString();
-        password = unesenipassword.getText().toString();
+        email = enteredemail.getText().toString();
+        password = enteredpassword.getText().toString();
         //first validate the form then move ahead
         //if this becomes true that means validation is successfull
         if (awesomeValidation.validate()) {
@@ -60,21 +60,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(),
-                                        "Prijava uspješna!",
+                                        getString(R.string.login_complete),
                                         Toast.LENGTH_LONG)
                                         .show();
 
-                                // if the user created intent to login activity
                                 Intent intent
                                         = new Intent(LoginActivity.this,
                                         FuelActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
+                                finish();
                             } else {
 
-                                // Login failed
                                 Toast.makeText(
                                         getApplicationContext(),
-                                        "Prijava neuspjela, pokušajte ponovno!",
+                                        getString(R.string.login_error),
                                         Toast.LENGTH_LONG)
                                         .show();
 

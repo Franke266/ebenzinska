@@ -50,7 +50,6 @@ public class EquipmentActivity extends AppCompatActivity {
     ArrayAdapter<String> adapter2;
     Spinner pricefilterspinner;
     ArrayList<String> spinnerDataList2;
-    //EditText searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,32 +78,6 @@ public class EquipmentActivity extends AppCompatActivity {
         recyclerView3.setLayoutManager(layoutManager3);
         recyclerView4.setLayoutManager(layoutManager4);
         pricefilterspinner = (Spinner) findViewById(R.id.spPriceFilter);
-        //searchView= (EditText) findViewById(R.id.search);
-
-        //LoadData("");
-        /*searchView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString()!=null){
-                    LoadData(s.toString());
-                }
-                else{
-                    LoadData("");
-                }
-            }
-
-
-        });*/
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -137,10 +110,10 @@ public class EquipmentActivity extends AppCompatActivity {
 
         spinnerDataList2 = new ArrayList<>();
         adapter2 = new ArrayAdapter<String>(EquipmentActivity.this, android.R.layout.simple_spinner_dropdown_item,spinnerDataList2);
-        spinnerDataList2.add("Poredano od A-Z");
-        spinnerDataList2.add("Poredano od Z-A");
-        spinnerDataList2.add("Cijena rastuća");
-        spinnerDataList2.add("Cijena padajuća");
+        spinnerDataList2.add(getString(R.string.sorted_az));
+        spinnerDataList2.add(getString(R.string.sorted_za));
+        spinnerDataList2.add(getString(R.string.sorted_price_high));
+        spinnerDataList2.add(getString(R.string.sorted_price_low));
 
         pricefilterspinner.setAdapter(adapter2);
         pricefilterspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -189,9 +162,6 @@ public class EquipmentActivity extends AppCompatActivity {
 
     }
 
-    /*@Override
-    protected void onStart(){
-        super.onStart();*/
     private void LoadData(String data){
         Query query =EquipRef.orderByChild("name").startAt(data).endAt(data+"\uf8ff");
         FirebaseRecyclerOptions<Equipment> options = new FirebaseRecyclerOptions.Builder<Equipment>().setQuery(query, Equipment.class).build();
@@ -386,8 +356,6 @@ public class EquipmentActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String data) {
                 LoadData(data);
                 LoadData2(data);
-                //LoadDataPriceAscending(data);
-                //LoadDataPriceDescending(data);
                 return false;
             }
 
@@ -395,8 +363,6 @@ public class EquipmentActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String data) {
                 LoadData(data);
                 LoadData2(data);
-                //LoadDataPriceAscending(data);
-                //LoadDataPriceDescending(data);
                 return false;
             }
         });
@@ -411,18 +377,20 @@ public class EquipmentActivity extends AppCompatActivity {
         if(id==R.id.logout)
         {
             CharSequence options[] = new CharSequence[]{
-                    "Da",
-                    "Ne"
+                    getString(R.string.yes),
+                    getString(R.string.no)
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(EquipmentActivity.this);
-            builder.setTitle("Jeste li sigurni da se želite odjaviti?");
+            builder.setTitle(getString(R.string.logout_check));
             builder.setItems(options, new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i){
                     if(i == 0){
                         FirebaseAuth.getInstance().signOut();
                         Intent intent= new Intent(EquipmentActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                        finish();
                     }
                     if( i == 1){
                         Intent intent= new Intent(EquipmentActivity.this, EquipmentActivity.class);

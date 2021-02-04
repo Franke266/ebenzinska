@@ -53,7 +53,6 @@ public class FoodActivity extends AppCompatActivity {
     ArrayAdapter<String> spinneradapter;
     Spinner pricefilterspinner;
     ArrayList<String> filterlist;
-    //EditText searchView;
 
 
     @Override
@@ -66,7 +65,6 @@ public class FoodActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
         bottomNavigationView.setSelectedItemId(R.id.ic_fastfood);
         FoodRef=FirebaseDatabase.getInstance().getReference().child("Food");
-        //searchView = (EditText) findViewById(R.id.search);
         recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
         recyclerView2 = (RecyclerView) findViewById(R.id.myRecycler2);
         recyclerView3 = (RecyclerView) findViewById(R.id.myRecycler3);
@@ -84,31 +82,6 @@ public class FoodActivity extends AppCompatActivity {
         recyclerView3.setLayoutManager(layoutManager3);
         recyclerView4.setLayoutManager(layoutManager4);
         pricefilterspinner = (Spinner) findViewById(R.id.spPriceFilter);
-
-        //LoadData("");
-        /*searchView.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if(s.toString()!=null){
-                    LoadData(s.toString());
-                }
-                else{
-                    LoadData("");
-                }
-            }
-
-
-        });*/
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -142,10 +115,10 @@ public class FoodActivity extends AppCompatActivity {
 
         filterlist = new ArrayList<>();
         spinneradapter =new ArrayAdapter<String>(FoodActivity.this, android.R.layout.simple_spinner_dropdown_item, filterlist);
-        filterlist.add("Poredano od A-Z");
-        filterlist.add("Poredano od Z-A");
-        filterlist.add("Cijena rastuća");
-        filterlist.add("Cijena padajuća");
+        filterlist.add(getString(R.string.sorted_az));
+        filterlist.add(getString(R.string.sorted_za));
+        filterlist.add(getString(R.string.sorted_price_high));
+        filterlist.add(getString(R.string.sorted_price_low));
 
         pricefilterspinner.setAdapter(spinneradapter);
         pricefilterspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -194,9 +167,6 @@ public class FoodActivity extends AppCompatActivity {
 
     }
 
-    /*@Override
-    protected void onStart(){
-        super.onStart();*/
     private void LoadData(String data){
         Query query =FoodRef.orderByChild("name").startAt(data).endAt(data+"\uf8ff");
         FirebaseRecyclerOptions<Food> options = new FirebaseRecyclerOptions.Builder<Food>().setQuery(query, Food.class).build();
@@ -423,18 +393,20 @@ public class FoodActivity extends AppCompatActivity {
         if(id==R.id.logout)
         {
             CharSequence options[] = new CharSequence[]{
-                    "Da",
-                    "Ne"
+                    getString(R.string.yes),
+                    getString(R.string.no)
             };
             AlertDialog.Builder builder = new AlertDialog.Builder(FoodActivity.this);
-            builder.setTitle("Jeste li sigurni da se želite odjaviti?");
+            builder.setTitle(getString(R.string.logout_check));
             builder.setItems(options, new DialogInterface.OnClickListener(){
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i){
                     if(i == 0){
                         FirebaseAuth.getInstance().signOut();
                         Intent intent= new Intent(FoodActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(intent);
+                        finish();
                     }
                     if( i == 1){
                         Intent intent= new Intent(FoodActivity.this, FoodActivity.class);

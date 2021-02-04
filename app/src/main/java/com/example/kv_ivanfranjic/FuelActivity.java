@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,11 +49,10 @@ public class FuelActivity extends AppCompatActivity{
     ArrayAdapter<String> adapter2;
     ArrayList<String> spinnerDataList;
     EditText fuelquantity;
-    //TextView totalfuelprice;
     Double totalprice=0.0;
     Double totalfuelquantity;
     Double fuelprice2;
-    String fuelprice, currentvalue, fuelname, fuelid, fuelimage;
+    String fuelprice, fuelname, fuelid, fuelimage;
     Button potvrdi;
 
     @Override
@@ -65,12 +65,12 @@ public class FuelActivity extends AppCompatActivity{
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView_Bar);
         bottomNavigationView.setSelectedItemId(R.id.ic_fuel);
         fuelquantity= findViewById(R.id.fuelquantity);
-        //totalfuelprice=findViewById(R.id.fueltotalprice);
         FuelRef=FirebaseDatabase.getInstance().getReference().child("Fuel");
         recyclerView = (RecyclerView) findViewById(R.id.myRecycler);
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
 
         potvrdi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,21 +129,18 @@ public class FuelActivity extends AppCompatActivity{
                                 fuelname = dataSnapshot.child("0").child("name").getValue().toString();
                                 fuelprice = dataSnapshot.child("0").child("price").getValue().toString();
                                 fuelimage = dataSnapshot.child("0").child("image").getValue().toString();
-                                //currentvalue = dataSnapshot.child("0").child("quantity").getValue().toString();
                                 break;
                             case 1:
                                 fuelid = dataSnapshot.child("1").child("id").getValue().toString();
                                 fuelname = dataSnapshot.child("1").child("name").getValue().toString();
                                 fuelprice = dataSnapshot.child("1").child("price").getValue().toString();
                                 fuelimage = dataSnapshot.child("1").child("image").getValue().toString();
-                                //currentvalue = dataSnapshot.child("1").child("quantity").getValue().toString();
                                 break;
                             case 2:
                                 fuelid = dataSnapshot.child("2").child("id").getValue().toString();
                                 fuelname = dataSnapshot.child("2").child("name").getValue().toString();
                                 fuelprice = dataSnapshot.child("2").child("price").getValue().toString();
                                 fuelimage = dataSnapshot.child("2").child("image").getValue().toString();
-                                //currentvalue = dataSnapshot.child("2").child("quantity").getValue().toString();
                                 break;
                         }
 
@@ -172,39 +169,48 @@ public class FuelActivity extends AppCompatActivity{
 
     private void addingToCartList() {
 
-        String saveCurrentTime, saveCurrentDate;
+        String saveCurrentDate;
         Calendar calForDate = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd, MMM, yyyy");
         saveCurrentDate = currentDate.format(calForDate.getTime());
 
-        /*SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-        saveCurrentTime = currentDate.format(calForDate.getTime());*/
-
         DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart list");
-        totalfuelquantity = Double.parseDouble(fuelquantity.getText().toString());
-        fuelprice2 = Double.parseDouble(fuelprice);
-        totalprice = totalfuelquantity*fuelprice2;
-
-        final HashMap<String, Object> cartMap = new HashMap<>();
-        cartMap.put("id", fuelid);
-        cartMap.put("name", fuelname);
-        cartMap.put("price", totalprice);
-        cartMap.put("date", saveCurrentDate);
-        /*cartMap.put("time", saveCurrentTime);*/
-        cartMap.put("quantity", fuelquantity.getText().toString());
-        cartMap.put("image", fuelimage);
-
-        cartListRef.child("Fuel").child(fuelid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful())
-                {
-                    Toast.makeText(FuelActivity.this, "Dodano u košaricu", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(FuelActivity.this, EquipmentActivity.class);
-                    startActivity(intent);
-                }
+        if(!TextUtils.isEmpty(fuelquantity.getText())) {
+            if(Double.parseDouble(fuelquantity.getText().toString())==0.00) {
+                Toast.makeText(FuelActivity.this, getString(R.string.fuel_quantity_empty), Toast.LENGTH_SHORT).show();
             }
-        });
+            else if (Double.parseDouble(fuelquantity.getText().toString()) <= 300.00) {
+
+                    totalfuelquantity = Double.parseDouble(fuelquantity.getText().toString());
+                    fuelprice2 = Double.parseDouble(fuelprice);
+                    totalprice = totalfuelquantity * fuelprice2;
+
+
+                    final HashMap<String, Object> cartMap = new HashMap<>();
+                    cartMap.put("id", fuelid);
+                    cartMap.put("name", fuelname);
+                    cartMap.put("price", totalprice);
+                    cartMap.put("date", saveCurrentDate);
+                    cartMap.put("quantity", fuelquantity.getText().toString());
+                    cartMap.put("image", fuelimage);
+
+                    cartListRef.child("Fuel").child(fuelid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(FuelActivity.this, getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(FuelActivity.this, EquipmentActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                } else {
+                    Toast.makeText(FuelActivity.this, getString(R.string.max_fuel_quantity), Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(FuelActivity.this, getString(R.string.fuel_quantity_empty), Toast.LENGTH_SHORT).show();
+        }
+
 
     }
 

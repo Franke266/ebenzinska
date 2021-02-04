@@ -63,17 +63,13 @@ public class FoodDetailsActivity extends AppCompatActivity {
     }
 
     private void addingToCartList() {
-        String saveCurrentTime, saveCurrentDate;
+        String saveCurrentDate;
         Calendar calForDate = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd, MMM, yyyy");
         saveCurrentDate = currentDate.format(calForDate.getTime());
 
-        /*SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-        saveCurrentTime = currentDate.format(calForDate.getTime());*/
-
         DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart list");
         totalfoodproductquantity = Integer.parseInt(foodquantity.getNumber());
-        foodproductprice = Double.parseDouble(food_details_price.getText().toString());
         totalfoodproductprice = totalfoodproductquantity*foodproductprice;
 
         final HashMap<String, Object> cartMap = new HashMap<>();
@@ -83,12 +79,11 @@ public class FoodDetailsActivity extends AppCompatActivity {
             cartMap.put("name", food_details_name.getText().toString());
             cartMap.put("price", totalfoodproductprice);
             cartMap.put("date", saveCurrentDate);
-            /*cartMap.put("time", saveCurrentTime);*/
             cartMap.put("quantity", foodquantity.getNumber());
             cartMap.put("image", foodimage);
         }
         else{
-            Toast.makeText(FoodDetailsActivity.this, "Dostupno samo "+availablequantity, Toast.LENGTH_SHORT).show();
+            Toast.makeText(FoodDetailsActivity.this, getString(R.string.available_quantity)+" "+availablequantity, Toast.LENGTH_SHORT).show();
         }
 
 
@@ -97,7 +92,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())
                 {
-                    Toast.makeText(FoodDetailsActivity.this, "Dodano u košaricu", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FoodDetailsActivity.this, getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(FoodDetailsActivity.this, FoodActivity.class);
                     startActivity(intent);
                 }
@@ -118,7 +113,8 @@ public class FoodDetailsActivity extends AppCompatActivity {
                     Food food = snapshot.getValue(Food.class);
                     food_details_name.setText(food.getName());
                     food_details_description.setText(food.getDescription());
-                    food_details_price.setText(food.getPrice().toString());
+                    food_details_price.setText(getString(R.string.price)+" "+(food.getPrice().toString())+" "+getString(R.string.pricetag));
+                    foodproductprice=food.getPrice();
                     foodimage=food.getImage();
                     availablequantity=Integer.parseInt(food.getQuantity());
                     Picasso.get().load(food.getImage()).into(food_details_image);

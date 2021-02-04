@@ -12,29 +12,29 @@ import android.widget.Spinner;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button PrijavaButton;
-    Button RegistracijaButton;
+    Button LoginButton;
+    Button RegisterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PrijavaButton = (Button)findViewById(R.id.prijavabutton);
-        PrijavaButton.setOnClickListener(new View.OnClickListener() {
+        LoginButton = (Button)findViewById(R.id.prijavabutton);
+        LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent OtvoriLogin = new Intent(getApplicationContext(), FuelActivity.class);
-                startActivity(OtvoriLogin);
+                Intent loginactivity = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(loginactivity);
             }
         });
 
-        RegistracijaButton = (Button)findViewById(R.id.registracijabutton);
-        RegistracijaButton.setOnClickListener(new View.OnClickListener() {
+        RegisterButton = (Button)findViewById(R.id.registracijabutton);
+        RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent OtvoriRegistraciju = new Intent(getApplicationContext(), RegisterActivity.class);
-                startActivity(OtvoriRegistraciju);
+                Intent registeractivity = new Intent(getApplicationContext(), RegisterActivity.class);
+                startActivity(registeractivity);
             }
         });
     }

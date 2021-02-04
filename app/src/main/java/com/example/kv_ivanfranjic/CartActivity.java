@@ -112,32 +112,29 @@ public class CartActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter4 holder, int position, @NonNull Cart model) {
                 holder.cartproductname.setText(model.getName());
-                holder.cartproductprice.setText("Cijena: "+(String.format("%.02f", Double.parseDouble(model.getPrice().toString())))+" kn");
-                holder.cartproductquantity.setText("Kol "+model.getQuantity());
+                holder.cartproductprice.setText(getString(R.string.price)+" "+(String.format("%.02f", Double.parseDouble(model.getPrice().toString())))+" "+getString(R.string.pricetag));
+                holder.cartproductquantity.setText(getString(R.string.quantity)+" "+model.getQuantity());
                 Picasso.get().load(model.getImage()).into(holder.cartproductimage);
 
                 productprice = model.getPrice().toString();
                 totalpricecart = totalpricecart + Double.parseDouble(productprice);
-                totalprice.setText("Ukupno: "+(String.format("%.02f", totalpricecart))+" kn");
+                totalprice.setText(getString(R.string.cart_total)+" "+(String.format("%.02f", totalpricecart))+" "+getString(R.string.pricetag
+                ));
 
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         CharSequence options[] = new CharSequence[]{
-                                //"Uredi",
-                                "Da",
-                                "Ne"
+                                getString(R.string.yes),
+                                getString(R.string.no)
 
                         };
                         AlertDialog.Builder builder = new AlertDialog.Builder(CartActivity.this);
-                        builder.setTitle("Jeste li sigurni da želite ukloniti ovaj artikl?");
+                        builder.setTitle(getString(R.string.delete_check));
                         builder.setItems(options, new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i){
                                 if(i == 1){
-                                   /* Intent intent= new Intent(CartActivity.this, EquipmentDetailsActivity.class);
-                                    intent.putExtra("id", model.getId());
-                                    startActivity(intent);*/
                                     Intent intent= new Intent(CartActivity.this, CartActivity.class);
                                     startActivity(intent);
                                 }
@@ -146,7 +143,7 @@ public class CartActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if (task.isSuccessful()){
-                                                Toast.makeText(CartActivity.this, "Artikl je uklonjen!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CartActivity.this, getString(R.string.product_deleted), Toast.LENGTH_SHORT).show();
                                                 Intent intent= new Intent(CartActivity.this, CartActivity.class);
                                                 startActivity(intent);
                                             }
@@ -174,23 +171,23 @@ public class CartActivity extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull MyAdapter4 holder2, int position2, @NonNull Cart model2) {
                 holder2.cartproductname.setText(model2.getName());
-                holder2.cartproductprice.setText("Cijena: "+(String.format("%.02f", Double.parseDouble(model2.getPrice().toString())))+" kn");
-                holder2.cartproductquantity.setText("Kol "+model2.getQuantity()+" l");
+                holder2.cartproductprice.setText(getString(R.string.price)+" "+(String.format("%.02f", Double.parseDouble(model2.getPrice().toString())))+" "+getString(R.string.pricetag));
+                holder2.cartproductquantity.setText(getString(R.string.quantity)+" "+model2.getQuantity()+" l");
                 Picasso.get().load(model2.getImage()).into(holder2.cartproductimage);
 
                 productprice2 = model2.getPrice().toString();
                 totalpricecart = totalpricecart + Double.parseDouble(productprice2);
-                totalprice.setText("Ukupno: "+(String.format("%.02f", totalpricecart))+" kn");
+                totalprice.setText(getString(R.string.cart_total)+" "+(String.format("%.02f", totalpricecart))+" "+getString(R.string.pricetag));
 
                 holder2.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view2) {
                         CharSequence options2[] = new CharSequence[]{
-                                "Da",
-                                "Ne"
+                                getString(R.string.yes),
+                                getString(R.string.no)
                         };
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(CartActivity.this);
-                        builder2.setTitle("Jeste li sigurni da želite ukloniti ovaj artikl?");
+                        builder2.setTitle(getString(R.string.delete_check));
                         builder2.setItems(options2, new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialogInterface2, int i){
@@ -199,7 +196,7 @@ public class CartActivity extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task2) {
                                             if (task2.isSuccessful()){
-                                                Toast.makeText(CartActivity.this, "Artikl je uklonjen!", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CartActivity.this, getString(R.string.product_deleted), Toast.LENGTH_SHORT).show();
                                                 Intent intent2= new Intent(CartActivity.this, CartActivity.class);
                                                 startActivity(intent2);
                                             }

@@ -64,35 +64,30 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
     }
 
     private void addingToCartList() {
-        String saveCurrentTime, saveCurrentDate;
+        String saveCurrentDate;
         Calendar calForDate = Calendar.getInstance();
         SimpleDateFormat currentDate = new SimpleDateFormat("dd, MMM, yyyy");
         saveCurrentDate = currentDate.format(calForDate.getTime());
 
-        /*SimpleDateFormat currentTime = new SimpleDateFormat("HH:mm:ss a");
-        saveCurrentTime = currentDate.format(calForDate.getTime());*/
-
         DatabaseReference cartListRef = FirebaseDatabase.getInstance().getReference().child("Cart list");
         totalequipmentproductquantity = Integer.parseInt(equipquantity.getNumber());
-        equipmentproductprice = Double.parseDouble(equip_details_price.getText().toString());
         totalequipmentproductprice = totalequipmentproductquantity*equipmentproductprice;
 
         final HashMap<String, Object> cartMap = new HashMap<>();
-        //if(Integer.parseInt(equipquantity.getNumber())<availablequantity)
-        //{
+        if(Integer.parseInt(equipquantity.getNumber())<availablequantity)
+        {
             cartMap.put("id", equipproductid);
             cartMap.put("name", equip_details_name.getText().toString());
             cartMap.put("price", totalequipmentproductprice);
             cartMap.put("date", saveCurrentDate);
-            /*cartMap.put("time", saveCurrentTime);*/
             cartMap.put("quantity", equipquantity.getNumber());
             cartMap.put("image", equipimage);
-        /*}
+        }
         else
         {
-            Toast.makeText(EquipmentDetailsActivity.this, "Dostupno samo "+availablequantity, Toast.LENGTH_SHORT).show();
+            Toast.makeText(EquipmentDetailsActivity.this, getString(R.string.available_quantity)+" "+availablequantity, Toast.LENGTH_SHORT).show();
 
-        }*/
+        }
 
 
         cartListRef.child("Products").child(equipproductid).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -100,7 +95,7 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful())
                 {
-                    Toast.makeText(EquipmentDetailsActivity.this, "Dodano u košaricu", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EquipmentDetailsActivity.this, getString(R.string.added_to_cart), Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EquipmentDetailsActivity.this, EquipmentActivity.class);
                     startActivity(intent);
                 }
@@ -121,7 +116,8 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
                     Equipment equip = snapshot.getValue(Equipment.class);
                     equip_details_name.setText(equip.getName());
                     equip_details_description.setText(equip.getDescription());
-                    equip_details_price.setText(equip.getPrice().toString());
+                    equip_details_price.setText(getString(R.string.price)+" "+(equip.getPrice().toString())+" "+getString(R.string.pricetag));
+                    equipmentproductprice=equip.getPrice();
                     equipimage=equip.getImage();
                     availablequantity=Integer.parseInt(equip.getQuantity());
                     Picasso.get().load(equip.getImage()).into(equip_details_image);

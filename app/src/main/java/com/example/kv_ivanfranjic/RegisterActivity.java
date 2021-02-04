@@ -22,10 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
-    /*EditText firstName;
-    EditText lastName;*/
-    EditText uneseniemail;
-    EditText unesenipassword;
+    EditText enteredemail;
+    EditText enteredpassword;
     Button register;
     private FirebaseAuth mAuth;
     private AwesomeValidation awesomeValidation;
@@ -37,10 +35,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_register);
         awesomeValidation = new AwesomeValidation(ValidationStyle.BASIC);
         mAuth = FirebaseAuth.getInstance();
-        /*firstName = findViewById(R.id.firstName);
-        lastName = findViewById(R.id.lastName);*/
-        uneseniemail = findViewById(R.id.email);
-        unesenipassword = findViewById(R.id.password);
+        enteredemail = findViewById(R.id.email);
+        enteredpassword = findViewById(R.id.password);
         register = findViewById(R.id.register);
 
         awesomeValidation.addValidation(this, R.id.email, Patterns.EMAIL_ADDRESS, R.string.email_missing);
@@ -51,8 +47,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void submitForm() {
         String email, password;
-        email = uneseniemail.getText().toString();
-        password = unesenipassword.getText().toString();
+        email = enteredemail.getText().toString();
+        password = enteredpassword.getText().toString();
         //first validate the form then move ahead
         //if this becomes true that means validation is successfull
         if (awesomeValidation.validate()) {
@@ -64,21 +60,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(),
-                                        "Registracija uspješna!",
+                                        getString(R.string.registration_complete),
                                         Toast.LENGTH_LONG)
                                         .show();
 
-                                // if the user created intent to login activity
                                 Intent intent
                                         = new Intent(RegisterActivity.this,
                                         FuelActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(intent);
+                                finish();
                             } else {
 
-                                // Registration failed
                                 Toast.makeText(
                                         getApplicationContext(),
-                                        "Registracija neuspjela, email u upotrebi!",
+                                        getString(R.string.registration_error),
                                         Toast.LENGTH_LONG)
                                         .show();
 
