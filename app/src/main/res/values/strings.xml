@@ -1,10 +1,10 @@
 <resources>
     <string name="app_name">eBenzinska</string>
     <string name="title_activity_login">LoginActivity</string>
-    <string name="credit_card_number">1111-2222-3333-4444</string>
+    <string name="credit_card_number">1111222233334444</string>
     <string name="credit_card_month">6</string>
     <string name="credit_card_year">2021</string>
-    <string name="credit_card_cvv">123</string>
+    <string name="credit_card_cvv">352</string>
     <string name="confirm_pay">Završi narudžbu</string>
     <string name="confirm_back">Odustani</string>
     <string name="prompt_firstname_lastname">Ime i prezime</string>
