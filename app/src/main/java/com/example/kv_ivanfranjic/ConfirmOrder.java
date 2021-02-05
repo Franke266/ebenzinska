@@ -98,6 +98,7 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
 
 
             DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference().child("Orders");
+            String key = ordersRef.push().getKey();
             final HashMap<String, Object> cartMap = new HashMap<>();
             cartMap.put("totalamount", totalpriceconfirm);
             cartMap.put("name", firstlastname.getText().toString());
@@ -107,7 +108,7 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
             cartMap.put("yearexp", creditcardyear.getText().toString());
             cartMap.put("cvv", creditcardcvv.getText().toString());
 
-            ordersRef.child("Orders").updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+            ordersRef.child(key).updateChildren(cartMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if(task.isSuccessful()) {
