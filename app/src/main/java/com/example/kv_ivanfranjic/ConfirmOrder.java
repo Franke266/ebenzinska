@@ -73,7 +73,7 @@ public class ConfirmOrder extends AppCompatActivity implements View.OnClickListe
         showtotalpriceconfirm.setText(getString(R.string.total)+" "+(String.format("%.02f", totalpriceconfirm2))+" "+getString(R.string.pricetag));
 
         awesomeValidation.addValidation(this, R.id.confirmname, "^[A-Za-z\\s]{1,}[\\.]{0,1}[A-Za-z\\s]{0,}$", R.string.name_missing);
-        awesomeValidation.addValidation(this, R.id.confirmcreditcard, Range.closed(19, 19), R.string.cd_number_missing);
+        awesomeValidation.addValidation(this, R.id.confirmcreditcard, "^[0-9]{16,16}$", R.string.cd_number_missing);
         awesomeValidation.addValidation(this, R.id.confirmmonthexp, Range.closed(1, 12), R.string.cd_month_missing);
         awesomeValidation.addValidation(this, R.id.confirmyearexp, Range.closed(2021, 2025), R.string.cd_year_missing);
         awesomeValidation.addValidation(this, R.id.confirmcvv, Range.closed(100, 999), R.string.cd_cvv_missing);
