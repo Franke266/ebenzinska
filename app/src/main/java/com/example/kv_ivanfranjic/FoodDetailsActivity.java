@@ -73,7 +73,7 @@ public class FoodDetailsActivity extends AppCompatActivity {
         totalfoodproductprice = totalfoodproductquantity*foodproductprice;
 
         final HashMap<String, Object> cartMap = new HashMap<>();
-        if(Integer.parseInt(foodquantity.getNumber())<availablequantity)
+        if(Integer.parseInt(foodquantity.getNumber())<=availablequantity)
         {
             cartMap.put("id", foodproductid);
             cartMap.put("name", food_details_name.getText().toString());
