@@ -74,7 +74,7 @@ public class EquipmentDetailsActivity extends AppCompatActivity {
         totalequipmentproductprice = totalequipmentproductquantity*equipmentproductprice;
 
         final HashMap<String, Object> cartMap = new HashMap<>();
-        if(Integer.parseInt(equipquantity.getNumber())<availablequantity)
+        if(Integer.parseInt(equipquantity.getNumber())<=availablequantity)
         {
             cartMap.put("id", equipproductid);
             cartMap.put("name", equip_details_name.getText().toString());
